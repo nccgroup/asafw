@@ -20,7 +20,7 @@ log()
 usage()
 {
     log "Usage:"
-    log "./unpack_repack_qcow2.sh -i <qcow2_file> [-o <out_qcow2_file> -t <template_qcow2_file> --inject-gdb --enable-gdb --disable-gdb --enable-aslr --disable-aslr --enable-root --disable-root --debug-shell --mount-qcow2 --unmount-qcow2 --unpack-only"
+    log "./unpack_repack_qcow2.sh -i <qcow2_file> [-o <out_qcow2_file> -t <template_qcow2_file> --inject-gdb --enable-gdb --disable-gdb --enable-aslr --disable-aslr --enable-root --disable-root --debug-shell --mount-qcow2 --unmount-qcow2 --unpack-only --grub-timeout"
     log "E.g.: ./unpack_repack_qcow2.sh -i /home/user/cisco/firmware/asav961-gns3.qcow2 -t /home/user/cisco/firmware/asav961.qcow2 -m -g -G -a -A -r -R -b"
     log "E.g.: ./unpack_repack_qcow2.sh -i /home/user/cisco/firmware/asav961-gns3.qcow2 -u"
     exit
@@ -54,6 +54,23 @@ extract_bin()
         exit
     fi
     log "Copied ${BIN} to ${DEST}"
+    
+    # XXX we do it here because after we unmount it. We should fix 
+    # the architecture of this script so we only mount at the beginning 
+    # and unmount at the end so we can do all modifications in between
+    # in one function
+    if [[ "$GRUB_TIMEOUT" == "YES" ]]
+    then
+        # default timeout is 10 seconds but we speed the process of booting by setting it to 1 :)
+        log "GRUB TIMEOUT set to 1"
+        sed -i 's/timeout \(.*\)/timeout 1/' ${QCOW2MNT}/boot/grub.conf
+        if [ $? != 0 ];
+        then
+            log "sed -i 's/timeout \(.*\)/timeout 1/' ${QCOW2MNT}/boot/grub.conf failed"
+            exit
+        fi
+    fi
+    
     umount ${1}
     log "Unmounted ${1}"
 }
@@ -77,7 +94,7 @@ init_nbd()
         log "[!] Couldn't load nbd driver"
         exit
     fi
-#    log "Mounting ${1} to /dev/nbd0"
+    log "Mounting ${1} to /dev/nbd0"
     qemu-nbd --connect=/dev/nbd0 "${1}"
 
     PARTCOUNT=$(fdisk /dev/nbd0 -l | grep nbd0p | wc -l)
@@ -161,6 +178,7 @@ DEBUGSHELL=
 # do we keep temporary files? Use if need to debug
 DEBUG="NO"
 UNPACK_ONLY="NO"
+GRUB_TIMEOUT="NO"
 while [[ $# -gt 0 ]]
 do
     key="$1"
@@ -228,6 +246,10 @@ do
         ;;
         -u|--unpack-only)
         UNPACK_ONLY="YES"
+        ;;
+        --grub-timeout)
+        GRUB_TIMEOUT="YES"
+        shift # past argument
         ;;
         -h|*)
         # unknown option
