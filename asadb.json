@@ -2000,6 +2000,22 @@
         "arch": 32
     },
     {
+        "arch": 32,
+        "exported_symbols": false,
+        "Canary": false,
+        "ASLR": false,
+        "version": "9.2.4.24",
+        "PIE": false,
+        "NX": false,
+        "imagebase": 134512640,
+        "fw": "asa924-24-k8.bin",
+        "uname": "Linux version 2.6.29.6 (builders@releng04) (gcc version 4.3.4 (crosstool-NG-1.5.0) ) #1 PREEMPT Wed Sep 13 15:13:51 PDT 2017",
+        "RELRO": false,
+        "stripped": false,
+        "heap_alloc": "dlmalloc 2.8.3",
+        "glibc_version": "2.9"
+    },
+    {
         "Canary": false,
         "heap_alloc": "dlmalloc 2.8.3",
         "RELRO": false,
