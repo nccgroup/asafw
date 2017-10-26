@@ -795,23 +795,23 @@ to use
 [advisories](http://www.cisco.com/c/en/us/support/docs/csa/cisco-sa-20170208-asa.html)
 to deduce branch EOL status. Last update of this table is July 2017.
 
- Cisco ASA Branch  | Date        | End-of-life? | Notes                               |
------------------- | ----------- | ------------ |------------------------------------ |
- 7.2               | <= Feb 2016 | Yes          |                                     |
- 8.0               | <= Feb 2016 | Yes          |                                     |
- 8.1               | <= Feb 2016 | Yes          |                                     |
- 8.2               | <= Feb 2016 | Yes          | Exceptional patch for IKE heap overflow |
- 8.3               | <= Feb 2016 | Yes          |                                     |
- 8.4               | <= May 2016 | Yes          |                                     |
- 8.5               | <= Feb 2016 | Yes          |                                     |
- 8.6               | <= Feb 2016 | Yes          |                                     |
- 8.7               | <= May 2016 | Yes          |                                     |
- 9.0               | <= Feb 2017 | Yes          |                                     |
- 9.1               |             | No           |                                     |
- 9.2               |             | No           |                                     |
- 9.3               | <= Feb 2017 | Yes          |                                     |
- 9.4               |             | No           |                                     |
- 9.5               |             | No           |                                     |
- 9.6               |             | No           |                                     |
- 9.7               |             | No           |                                     |
- 9.8               |             | No           |                                     |
+ Cisco ASA Branch  | Latest Update | End-of-life? | Notes                               |
+------------------ | ------------- | ------------ |------------------------------------ |
+ 7.2               | <= Feb 2016   | Yes          |                                     |
+ 8.0               | <= Feb 2016   | Yes          |                                     |
+ 8.1               | <= Feb 2016   | Yes          |                                     |
+ 8.2               | <= Feb 2016   | Yes          | Exceptional patch for IKE heap overflow |
+ 8.3               | <= Feb 2016   | Yes          |                                     |
+ 8.4               | <= May 2016   | Yes          |                                     |
+ 8.5               | <= Feb 2016   | Yes          |                                     |
+ 8.6               | <= Feb 2016   | Yes          |                                     |
+ 8.7               | <= May 2016   | Yes          |                                     |
+ 9.0               | <= Feb 2017   | Yes          |                                     |
+ 9.1               |               | No           |                                     |
+ 9.2               |               | No           |                                     |
+ 9.3               | <= Feb 2017   | Yes          |                                     |
+ 9.4               |               | No           |                                     |
+ 9.5               |               | No           |                                     |
+ 9.6               |               | No           |                                     |
+ 9.7               |               | No           |                                     |
+ 9.8               |               | No           |                                     |
