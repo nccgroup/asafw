@@ -732,13 +732,13 @@ modify_bin()
 ##
 repack_bin()
 {
-
     # Enter working directory. Usually either work/ or <extracted dir>/rootfs/
     OLDDIR=${PWD}
     dbglog "Entering ${1}"
     cd $1
 
-    if [ $# > 1 ]; then
+    if [[ $# > 1 ]]; then
+        log "beep"
         # If we get additional args it means we are repacking an extracted
         # directory and unpack_bin wasn't called. That means we have to set
         # these ourself
@@ -748,7 +748,7 @@ repack_bin()
     fi
 
     log "repack_bin: $FWFILE"
-    find . | ${CPIO} -o -H newc | gzip > "$GZIP_MODIFIED"
+    find . | ${CPIO} -o -H newc 2>/dev/null | gzip > "$GZIP_MODIFIED"
 
     # Leave working directory
     dbglog "Returning to ${OLDDIR}"
@@ -762,6 +762,7 @@ repack_bin()
     else
         ROOTARGS=
     fi
+    dbglog ${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS
     ${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS
     if [ $? != 0 ];
     then
@@ -791,6 +792,8 @@ GUNZIP=gunzip
 CPIO=cpio
 
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+# XXX - Could switch this to an associative array and pass it around instead
+#       of relying on globals
 INPUT=
 OUTDIR=
 OUTBIN=
@@ -977,7 +980,7 @@ elif [ -f $INPUTFW ]
 then
     log "Single firmware detected"
     ORIGDIR=${PWD}
-    OUTDIR=$INPUTFW
+    OUTDIR=$(dirname $INPUTFW)
     FWFILE=$(basename "$INPUTFW")
     WORKINGDIR=$(dirname "$INPUTFW")
     dbglog "Entering ${WORKINGDIR}"
