@@ -252,7 +252,7 @@ def update_db(dbname, bin_name, info):
         logmsg("Adding new element:")
         print(new_r)
         results.append(new_r)
-    results = sorted(results, key=lambda k: k["fw"])
+    results = sorted(results, key=lambda k: k["version"].split("."))
     open(dbname, "wb").write(bytes(json.dumps(results, indent=4), encoding="UTF-8"))
 
 if __name__ == "__main__":
