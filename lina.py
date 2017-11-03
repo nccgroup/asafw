@@ -173,6 +173,7 @@ class LinuxReverseShell(object):
 # Inject a debug shell into "lina" by patching the aaa_admin_authenticate()
 # function. It allows triggering it when connecting over SSH
 def inject_debug_shell(config, indata, scratch_off):
+    logmsg("Installing debug shell at 0x%x" % scratch_off)
     c = config
     rev = LinuxReverseShell(c)
     if rev.buildShellcode() != True:
@@ -187,13 +188,37 @@ def inject_debug_shell(config, indata, scratch_off):
         logmsg("Error: Looks like shellcode is quite big, something wrong?")
         sys.exit(1)
 
-    logmsg("Size of clean lina: %d bytes" % len(indata))
-    logmsg("Patching lina offset: 0x%x with len = %d bytes" % 
-            (scratch_off, patched_func_len))
-    linadata = indata[:scratch_off] + rev._shellcode \
+    lina_data = indata[:scratch_off] + rev._shellcode \
                + indata[scratch_off+patched_func_len:]
+    logmsg("Patched lina offset: 0x%x with len = %d bytes (DEBUG SHELL)" % 
+            (scratch_off, patched_func_len))
 
-    return (linadata, scratch_off+patched_func_len)
+    return (lina_data, scratch_off+patched_func_len)
+
+# Patch jump for lina's signature check in lina_monitor
+# e.g. asav962-7
+# .text:000000000000395B E8 30 1D 00+   call    code_sign_verify_signature_image
+# .text:0000000000003960 85 C0          test    eax, eax
+# .text:0000000000003962 89 C3          mov     ebx, eax
+# .text:0000000000003964 74 50          jz      short loc_39B6
+# Patch is to replace:
+# jz short loc_39B6 == "74 50" == je 0x52
+# by:
+# jmp 0x52 == "eb 50"
+def patch_lina_signature_check(config, indata, scratch_off):
+    logmsg("Patching lina signature check at 0x%x" % scratch_off)
+    c = config
+    
+    if indata[scratch_off:scratch_off+1] != b"\x74":
+        logmsg("Error: Opcode not supported. We only support jz for now: Found: 0x%x" % ord(indata[scratch_off:scratch_off+1]))
+        sys.exit(1)
+    
+    outdata = indata[:scratch_off] + b"\xeb" \
+               + indata[scratch_off+1:]
+    logmsg("Patched lina_monitor offset: 0x%x with len = 1 bytes (SIGN CHECK)" % 
+            (scratch_off))
+
+    return outdata
 
 def main():
     parser = argparse.ArgumentParser()
@@ -205,14 +230,14 @@ def main():
                         help="Index of the target (use info.py -l to list them all)")
     parser.add_argument('-f', dest='lina_file', default=None, \
                         help="Input lina file")
-    #parser.add_argument('-F', dest='lina_monitor_file', default=None, \
-    #                    help="Input lina_monitor file (only in 64-bit)")
+    parser.add_argument('-F', dest='lina_monitor_file', default=None, \
+                        help="Input lina_monitor file (only in ASAv 64-bit)")
     parser.add_argument('-b', dest='bin_name', default=None, \
                         help="Input bin name")
     parser.add_argument('-o', dest='lina_file_out', default=None, \
                         help="Output lina file")
-    #parser.add_argument('-O', dest='lina_monitor_file_out', default=None, \
-    #                    help="Output lina_monitor file (only in 64-bit)")
+    parser.add_argument('-O', dest='lina_monitor_file_out', default=None, \
+                        help="Output lina_monitor file (only in ASAv 64-bit)")
     parser.add_argument('-v', dest='verbose', default=False, 
             action="store_true", help="Display more info")
     parser.add_argument('-d', dest='target_file', default=None, 
@@ -229,20 +254,6 @@ def main():
         logmsg("You need to specify an output lina file with -o")
         sys.exit(1)
 
-    # XXX - lina_monitor is not supported yet by this script. We patch it
-    # manually in case we need it for an ASAv firmware
-
-    #lina_monitor_file = args.lina_monitor_file
-    #lmon_path = '/rootfs/asa/bin/lina_monitor'
-    #if lina_monitor_file == None:
-    #    lina_monitor_file = default_dir + '/_asav962-7-from-qcow2.bin.extracted/' \
-    #       + lmon_path
-    #    logmsg("Warning: No -F specified. Using %s" % lina_monitor_file)
-    #lina_monitor_file_out = args.lina_monitor_file_out
-    #if lina_monitor_file_out == None:
-    #    lina_monitor_file_out = default_dir + '/_asav962-7/lina_monitor_patched'
-    #    logmsg("Warning: No -O specified. Using %s" % lina_monitor_file_out)
-
     # setup config
     c = {}
     c["revPort"]        = int(args.cbport)    # This is for debug shell only
@@ -254,10 +265,10 @@ def main():
     targets = load_targets(c["target_file"])
     target_index = args.target_index
     if target_index == None:
-        logmsg("WARN: No index specified. Will guess based on lina path...")
         if args.bin_name != None:
             bin_name = args.bin_name
         else:
+            logmsg("WARN: No index or firmware name specified. Will guess based on lina path...")
             bin_name = build_bin_name(args.lina_file)
             if not bin_name:
                 logmsg("[x] Failed to guess target")
@@ -272,8 +283,35 @@ def main():
         logmsg("Error: Bad target index")
         sys.exit(1)
     c["target"]   = targets[index]
+    
+    # let's patch lina_monitor (supported/required for ASAv only afaict)
+    if c["target"]["fw"].startswith("asav"):
+        if args.lina_monitor_file == None:
+            logmsg("You need to specify an input lina_monitor file with -F")
+            sys.exit(1)
+        if args.lina_monitor_file_out == None:
+            logmsg("You need to specify an output lina_monitor file with -O")
+            sys.exit(1)
 
-    # we need a valid lina_imagebase so the offset in the ELF is right
+        logmsg("Input lina_monitor file: %s" % args.lina_monitor_file)
+        lm_data = open(args.lina_monitor_file, 'rb').read()
+        logmsg("Size of unpatched lina_monitor: %d bytes" % len(lm_data))
+
+        # relative offset in memory is actual offset in ELF
+        try:
+            sign_check_jz_offset = c["target"]["lm_addresses"]["jz_after_code_sign_verify_signature_image"]
+        except KeyError:
+            logmsg("Error: can't find jz_after_code_sign_verify_signature_image, you need to add symbol with asadbg_rename.py/asadbg_hunt.py first")
+            sys.exit(1)
+           
+        lm_data = patch_lina_signature_check(c, lm_data, sign_check_jz_offset)
+    
+        open(args.lina_monitor_file_out, 'wb').write(lm_data)
+        logmsg("Output lina_monitor file: %s" % args.lina_monitor_file_out)
+
+    # let's patch lina (and glibc for ASAv)
+
+    # we need a valid imagebase so the offset in the ELF is right
     if c["target"]["lina_imagebase"] == 0:
         logmsg("Error: Looks like aaa_admin_authenticate will be wrong")
         sys.exit(1)
@@ -285,13 +323,14 @@ def main():
         sys.exit(1)
     scratch_off = aaa_admin_auth_offset
 
-    logmsg("Input file: %s" % args.lina_file)
-    indata = open(args.lina_file, 'rb').read()
+    logmsg("Input lina file: %s" % args.lina_file)
+    lina_data = open(args.lina_file, 'rb').read()
+    logmsg("Size of unpatched lina: %d bytes" % len(lina_data))
 
-    linadata, scratch_off = inject_debug_shell(c, indata, scratch_off)
+    lina_data, scratch_off = inject_debug_shell(c, lina_data, scratch_off)
 
-    open(args.lina_file_out, 'wb').write(linadata)
-    logmsg("Output file: %s" % args.lina_file_out)
+    open(args.lina_file_out, 'wb').write(lina_data)
+    logmsg("Output lina file: %s" % args.lina_file_out)
 
 if __name__ == '__main__':
     main()

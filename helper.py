@@ -93,12 +93,16 @@ def is_new(targets, new):
     return True
 
 def load_targets(targetdb):
+    # XXX log.logmsg() does not work 
+    # as it prints <helper.logger instance at 0x06B77EB8>
+    # so we use print() instead :|
+    print("[helper] Reading from %s" % targetdb)
     if targetdb.endswith(".pickle"):
         usePickle = True
     elif targetdb.endswith(".json"):
         usePickle = False
     else:
-        print("Can't decide if pickle to use based on extension")
+        print("[helper] Can't decide if pickle to use based on extension")
         sys.exit()
     if os.path.isfile(targetdb):
         if usePickle:
@@ -113,12 +117,27 @@ def load_targets(targetdb):
                 # hax so we can use it if it fails to open the db
                 targets = pickle.load(open(targetdb, "r"))
         else:
-            with open(targetdb, "r") as tmp:
-                targets = json.loads(tmp.read())  
+            # even when using filelock, it looks like sometimes we read bad JSON
+            # so we try several times :|
+            max_attempts = 5
+            attempts = 0
+            while attempts < max_attempts:
+                try:
+                    with open(targetdb, "rb") as tmp:
+                        targets = json.loads(tmp.read())
+                except ValueError:
+                    print("[helper] Failed to read valid JSON, trying again in 1 sec")
+                    time.sleep(1)
+                    attempts += 1
+                else:
+                    break
+            if attempts == max_attempts:
+                print('[helper] [!] failed to read %s' % targetdb)
+                sys.exit() 
     else:
-        print('[!] %s file not found' % targetdb)
-        sys.exit()
-    return targets
+        print('[helper] [!] %s file not found' % targetdb)
+        sys.exit() 
+    return targets 
 
 def get_target_index(targets, bin_name):
     for i in range(len(targets)):
