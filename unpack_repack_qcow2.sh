@@ -20,10 +20,10 @@ log()
 usage()
 {
     log "Usage:"
-    log "./unpack_repack_qcow2.sh -i <qcow2_file> [-o <out_qcow2_file> -t <template_qcow2_file> --inject-gdb --enable-gdb --disable-gdb --enable-aslr --disable-aslr --enable-root --disable-root --debug-shell --mount-qcow2 --unmount-qcow2 --unpack-only --grub-timeout --inject-grub-config <grub.conf> --inject-multi-bin <multi-bin qcow2>"
+    log "./unpack_repack_qcow2.sh -i <qcow2_file> [-o <out_qcow2_file> -t <template_qcow2_file> --inject-gdb --enable-gdb --disable-gdb --enable-aslr --disable-aslr --enable-root --disable-root --debug-shell --mount-qcow2 --unmount-qcow2 --unpack-only --grub-timeout --inject-grub-config <grub.conf> --inject-bin <multi-bin qcow2>"
     log "E.g.: ./unpack_repack_qcow2.sh -i /home/user/cisco/firmware/asav961-gns3.qcow2 -t /home/user/cisco/firmware/asav961.qcow2 -m -g -G -a -A -r -R -b"
     log "E.g.: ./unpack_repack_qcow2.sh -i /home/user/cisco/firmware/asav961-gns3.qcow2 -u"
-    log "E.g.: ./unpack_repack_qcow2.sh -i asav962-7-multiple-bins.qcow2 --inject-grub-conf grub-multi-bin.conf --inject-multi-bin asa962-7-smp-k8-noaslr-backdoor.bin"
+    log "E.g.: ./unpack_repack_qcow2.sh -i asav962-7-multiple-bins.qcow2 --inject-grub-conf grub-multi-bin.conf --inject-bin asa962-7-smp-k8-noaslr-backdoor.bin"
     exit
 }
 
@@ -56,8 +56,6 @@ inject_multibin()
     # In a mult-bin qcow partition 2 holds the extra bin files
     mount_qcow ${1} 2
     cp ${2} ${1}/
-    # XXX - this is a test
-    cp config-asav9627 ${HOME}/mnt/qcow2/  
     log "Wrote ${2} into partition 2 of multi-bin qcow"
     umount ${1}
 }
@@ -412,8 +410,8 @@ do
         INJECT_GRUB_CONF="${2}"
         shift # past argument
         ;;
-        --inject-multi-bin)
-        INJECT_MULTI_BIN="${2}"
+        --inject-bin)
+        INJECT_BIN="${2}"
         shift # past argument
         ;;
         -h|*)
@@ -486,19 +484,19 @@ if [ ! -z "${QCOW_UMOUNT}" ]; then
     exit
 fi
 
-if [[ ! -z "$INJECT_GRUB_CONF" && -z "$INJECT_MULTI_BIN" ]]; then
-    log "ERROR: grub.conf injection currently requires --inject-multi-bin"
+if [[ ! -z "$INJECT_GRUB_CONF" && -z "$INJECT_BIN" ]]; then
+    log "ERROR: grub.conf injection currently requires --inject-bin"
     exit
 fi
 
-if [[ ! -z "$INJECT_MULTI_BIN" ]]; then
-    init_nbd ${INJECT_MULTI_BIN}
+if [[ ! -z "$INJECT_BIN" ]]; then
+    init_nbd ${QCOW2FILE}
     if [[ ! -z "${INJECT_GRUB_CONF}" ]]; then
         echo "Injecting grub config"
         inject_grub_config ${QCOW2MNT} ${INJECT_GRUB_CONF}
     fi
-    log "Injecting ${QCOW2FILE} into ${OUTQCOW2FILE}"
-    inject_multibin ${QCOW2MNT} ${QCOW2FILE}
+    log "Injecting ${INJECT_BIN} into ${QCOW2FILE}"
+    inject_multibin ${QCOW2MNT} ${INJECT_BIN}
 
     fini_nbd
 else
