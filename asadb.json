@@ -10,7 +10,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa802-k8.bin",
         "version": "8.0.2",
         "arch": 32
@@ -26,7 +26,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa803-k8.bin",
         "version": "8.0.3",
         "arch": 32
@@ -42,7 +42,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa804-16-k8.bin",
         "version": "8.0.4.16",
         "arch": 32
@@ -58,7 +58,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa804-k8.bin",
         "version": "8.0.4",
         "arch": 32
@@ -74,7 +74,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa805-23-k8.bin",
         "version": "8.0.5.23",
         "arch": 32
@@ -90,7 +90,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa805-28-k8.bin",
         "version": "8.0.5.28",
         "arch": 32
@@ -106,7 +106,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa805-31-k8.bin",
         "version": "8.0.5.31",
         "arch": 32
@@ -122,7 +122,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa805-k8.bin",
         "version": "8.0.5",
         "arch": 32
@@ -138,7 +138,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa811-smp-k8.bin",
         "version": "8.1.1",
         "arch": 32
@@ -154,7 +154,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa812-23-smp-k8.bin",
         "version": "8.1.2.23",
         "arch": 32
@@ -170,7 +170,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa812-49-smp-k8.bin",
         "version": "8.1.2.49",
         "arch": 32
@@ -186,7 +186,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa812-50-smp-k8.bin",
         "version": "8.1.2.50",
         "arch": 32
@@ -202,7 +202,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa812-55-smp-k8.bin",
         "version": "8.1.2.55",
         "arch": 32
@@ -218,7 +218,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa812-56-smp-k8.bin",
         "version": "8.1.2.56",
         "arch": 32
@@ -234,7 +234,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa812-smp-k8.bin",
         "version": "8.1.2",
         "arch": 32
@@ -250,7 +250,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa821-k8.bin",
         "version": "8.2.1",
         "arch": 32
@@ -266,7 +266,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa822-k8.bin",
         "version": "8.2.2",
         "arch": 32
@@ -282,7 +282,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa822-smp-k8.bin",
         "version": "8.2.2",
         "arch": 32
@@ -298,7 +298,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa823-k8.bin",
         "version": "8.2.3",
         "arch": 32
@@ -314,7 +314,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa823-smp-k8.bin",
         "version": "8.2.3",
         "arch": 32
@@ -330,7 +330,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa824-4-k8.bin",
         "version": "8.2.4.4",
         "arch": 32
@@ -346,7 +346,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa824-k8.bin",
         "version": "8.2.4",
         "arch": 32
@@ -362,7 +362,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa824-smp-k8.bin",
         "version": "8.2.4",
         "arch": 32
@@ -378,7 +378,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-13-k8.bin",
         "version": "8.2.5.13",
         "arch": 32
@@ -394,7 +394,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-22-k8.bin",
         "version": "8.2.5.22",
         "arch": 32
@@ -410,7 +410,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-26-k8.bin",
         "version": "8.2.5.26",
         "arch": 32
@@ -426,7 +426,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-33-k8.bin",
         "version": "8.2.5.33",
         "arch": 32
@@ -442,7 +442,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-41-k8.bin",
         "version": "8.2.5.41",
         "arch": 32
@@ -458,7 +458,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-46-k8.bin",
         "version": "8.2.5.46",
         "arch": 32
@@ -474,7 +474,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-51-k8.bin",
         "version": "8.2.5.51",
         "arch": 32
@@ -490,7 +490,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-52-k8.bin",
         "version": "8.2.5.52",
         "arch": 32
@@ -506,7 +506,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-57-k8.bin",
         "version": "8.2.5.57",
         "arch": 32
@@ -522,7 +522,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-59-k8.bin",
         "version": "8.2.5.59",
         "arch": 32
@@ -538,7 +538,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-k8.bin",
         "version": "8.2.5",
         "arch": 32
@@ -554,7 +554,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa825-smp-k8.bin",
         "version": "8.2.5",
         "arch": 32
@@ -570,7 +570,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa831-k8.bin",
         "version": "8.3.1",
         "arch": 32
@@ -586,7 +586,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa831-smp-k8.bin",
         "version": "8.3.1",
         "arch": 32
@@ -602,7 +602,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa832-13-k8.bin",
         "version": "8.3.2.13",
         "arch": 32
@@ -618,7 +618,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa832-25-k8.bin",
         "version": "8.3.2.25",
         "arch": 32
@@ -634,7 +634,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa832-39-k8.bin",
         "version": "8.3.2.39",
         "arch": 32
@@ -650,7 +650,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa832-4-k8.bin",
         "version": "8.3.2.4",
         "arch": 32
@@ -666,7 +666,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa832-40-k8.bin",
         "version": "8.3.2.40",
         "arch": 32
@@ -682,7 +682,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa832-44-k8.bin",
         "version": "8.3.2.44",
         "arch": 32
@@ -698,7 +698,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa832-44-smp-k8.bin",
         "version": "8.3.2.44",
         "arch": 32
@@ -714,7 +714,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa832-k8.bin",
         "version": "8.3.2",
         "arch": 32
@@ -730,7 +730,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa832-smp-k8.bin",
         "version": "8.3.2",
         "arch": 32
@@ -746,7 +746,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa841-11-k8.bin",
         "version": "8.4.1.11",
         "arch": 32
@@ -762,7 +762,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa841-k8.bin",
         "version": "8.4.1",
         "arch": 32
@@ -778,7 +778,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa841-smp-k8.bin",
         "version": "8.4.1",
         "arch": 64
@@ -794,7 +794,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa842-8-k8.bin",
         "version": "8.4.2.8",
         "arch": 32
@@ -810,7 +810,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa842-k8.bin",
         "version": "8.4.2",
         "arch": 32
@@ -826,7 +826,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa842-smp-k8.bin",
         "version": "8.4.2",
         "arch": 64
@@ -842,7 +842,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa843-8-k8.bin",
         "version": "8.4.3.8",
         "arch": 32
@@ -858,7 +858,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa843-k8.bin",
         "version": "8.4.3",
         "arch": 32
@@ -874,7 +874,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa843-smp-k8.bin",
         "version": "8.4.3",
         "arch": 64
@@ -890,7 +890,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa844-1-k8.bin",
         "version": "8.4.4.1",
         "arch": 32
@@ -906,7 +906,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa844-1-smp-k8.bin",
         "version": "8.4.4.1",
         "arch": 64
@@ -922,7 +922,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa844-3-k8.bin",
         "version": "8.4.4.3",
         "arch": 32
@@ -938,7 +938,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa844-5-k8.bin",
         "version": "8.4.4.5",
         "arch": 32
@@ -954,7 +954,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa844-9-k8.bin",
         "version": "8.4.4.9",
         "arch": 32
@@ -970,7 +970,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa844-k8.bin",
         "version": "8.4.4",
         "arch": 32
@@ -986,7 +986,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa845-k8.bin",
         "version": "8.4.5",
         "arch": 32
@@ -1002,7 +1002,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa845-smp-k8.bin",
         "version": "8.4.5",
         "arch": 64
@@ -1018,7 +1018,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa846-5-k8.bin",
         "version": "8.4.6.5",
         "arch": 32
@@ -1034,7 +1034,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa846-k8.bin",
         "version": "8.4.6",
         "arch": 32
@@ -1050,7 +1050,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa846-smp-k8.bin",
         "version": "8.4.6",
         "arch": 64
@@ -1066,7 +1066,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa847-15-k8.bin",
         "version": "8.4.7.15",
         "arch": 32
@@ -1082,7 +1082,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa847-26-k8.bin",
         "version": "8.4.7.26",
         "arch": 32
@@ -1098,7 +1098,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa847-28-k8.bin",
         "version": "8.4.7.28",
         "arch": 32
@@ -1114,7 +1114,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa847-29-k8.bin",
         "version": "8.4.7.29",
         "arch": 32
@@ -1130,7 +1130,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa847-30-k8.bin",
         "version": "8.4.7.30",
         "arch": 32
@@ -1146,7 +1146,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa847-31-k8.bin",
         "version": "8.4.7.31",
         "arch": 32
@@ -1162,7 +1162,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa847-k8.bin",
         "version": "8.4.7",
         "arch": 32
@@ -1178,7 +1178,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa847-smp-k8.bin",
         "version": "8.4.7",
         "arch": 64
@@ -1194,7 +1194,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa861-smp-k8.bin",
         "version": "8.6.1",
         "arch": 64
@@ -1210,7 +1210,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa901-k8.bin",
         "version": "9.0.1",
         "arch": 32
@@ -1226,7 +1226,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa902-k8.bin",
         "version": "9.0.2",
         "arch": 32
@@ -1242,7 +1242,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa902-smp-k8.bin",
         "version": "9.0.2",
         "arch": 64
@@ -1258,7 +1258,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa903-k8.bin",
         "version": "9.0.3",
         "arch": 32
@@ -1274,7 +1274,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa903-smp-k8.bin",
         "version": "9.0.3",
         "arch": 64
@@ -1290,7 +1290,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa904-38-k8.bin",
         "version": "9.0.4.38",
         "arch": 32
@@ -1306,7 +1306,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa904-39-k8.bin",
         "version": "9.0.4.39",
         "arch": 32
@@ -1322,7 +1322,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa904-40-k8.bin",
         "version": "9.0.4.40",
         "arch": 32
@@ -1338,7 +1338,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa904-42-k8.bin",
         "version": "9.0.4.42",
         "arch": 32
@@ -1354,7 +1354,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa904-5-k8.bin",
         "version": "9.0.4.5",
         "arch": 32
@@ -1370,7 +1370,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa904-k8.bin",
         "version": "9.0.4",
         "arch": 32
@@ -1386,7 +1386,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa904-smp-k8.bin",
         "version": "9.0.4",
         "arch": 64
@@ -1402,7 +1402,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa911-4-k8.bin",
         "version": "9.1.1.4",
         "arch": 32
@@ -1418,7 +1418,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa911-k8.bin",
         "version": "9.1.1",
         "arch": 32
@@ -1434,7 +1434,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa911-smp-k8.bin",
         "version": "9.1.1",
         "arch": 64
@@ -1450,7 +1450,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa912-k8.bin",
         "version": "9.1.2",
         "arch": 32
@@ -1466,7 +1466,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa912-smp-k8.bin",
         "version": "9.1.2",
         "arch": 64
@@ -1482,7 +1482,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa913-k8.bin",
         "version": "9.1.3",
         "arch": 32
@@ -1498,7 +1498,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa913-smp-k8.bin",
         "version": "9.1.3",
         "arch": 64
@@ -1514,7 +1514,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa914-5-k8.bin",
         "version": "9.1.4.5",
         "arch": 32
@@ -1530,7 +1530,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa914-k8.bin",
         "version": "9.1.4",
         "arch": 32
@@ -1546,7 +1546,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa914-smp-k8.bin",
         "version": "9.1.4",
         "arch": 64
@@ -1562,7 +1562,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa915-12-k8.bin",
         "version": "9.1.5.12",
         "arch": 32
@@ -1578,7 +1578,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa915-16-k8.bin",
         "version": "9.1.5.16",
         "arch": 32
@@ -1594,7 +1594,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa915-19-k8.bin",
         "version": "9.1.5.19",
         "arch": 32
@@ -1610,7 +1610,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa915-21-k8.bin",
         "version": "9.1.5.21",
         "arch": 32
@@ -1626,7 +1626,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa915-k8.bin",
         "version": "9.1.5",
         "arch": 32
@@ -1642,7 +1642,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa915-smp-k8.bin",
         "version": "9.1.5",
         "arch": 64
@@ -1658,7 +1658,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa916-10-k8.bin",
         "version": "9.1.6.10",
         "arch": 32
@@ -1674,7 +1674,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa916-11-k8.bin",
         "version": "9.1.6.11",
         "arch": 32
@@ -1690,7 +1690,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa916-4-k8.bin",
         "version": "9.1.6.4",
         "arch": 32
@@ -1706,7 +1706,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa916-k8.bin",
         "version": "9.1.6",
         "arch": 32
@@ -1722,7 +1722,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa916-smp-k8.bin",
         "version": "9.1.6",
         "arch": 64
@@ -1738,7 +1738,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa917-12-k8.bin",
         "version": "9.1.7.12",
         "arch": 32
@@ -1754,7 +1754,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa917-13-k8.bin",
         "version": "9.1.7.13",
         "arch": 32
@@ -1770,7 +1770,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa917-4-k8.bin",
         "version": "9.1.7.4",
         "arch": 32
@@ -1786,7 +1786,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa917-6-k8.bin",
         "version": "9.1.7.6",
         "arch": 32
@@ -1802,7 +1802,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa917-9-k8.bin",
         "version": "9.1.7.9",
         "arch": 32
@@ -1818,7 +1818,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa917-k8.bin",
         "version": "9.1.7",
         "arch": 32
@@ -1834,7 +1834,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa921-k8.bin",
         "version": "9.2.1",
         "arch": 32
@@ -1850,7 +1850,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa921-smp-k8.bin",
         "version": "9.2.1",
         "arch": 64
@@ -1866,7 +1866,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa922-4-k8.bin",
         "version": "9.2.2.4",
         "arch": 32
@@ -1882,7 +1882,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa922-4-smp-k8.bin",
         "version": "9.2.2.4",
         "arch": 64
@@ -1898,7 +1898,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa922-k8.bin",
         "version": "9.2.2",
         "arch": 32
@@ -1914,7 +1914,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa923-k8.bin",
         "version": "9.2.3",
         "arch": 32
@@ -1930,7 +1930,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa923-smp-k8.bin",
         "version": "9.2.3",
         "arch": 64
@@ -1946,7 +1946,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa924-10-k8.bin",
         "version": "9.2.4.10",
         "arch": 32
@@ -1962,7 +1962,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa924-13-smp-k8.bin",
         "version": "9.2.4.13",
         "arch": 64
@@ -1978,7 +1978,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa924-14-k8.bin",
         "version": "9.2.4.14",
         "arch": 32
@@ -1994,7 +1994,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa924-18-k8.bin",
         "version": "9.2.4.18",
         "arch": 32
@@ -2007,7 +2007,7 @@
         "version": "9.2.4.24",
         "PIE": false,
         "NX": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa924-24-k8.bin",
         "uname": "Linux version 2.6.29.6 (builders@releng04) (gcc version 4.3.4 (crosstool-NG-1.5.0) ) #1 PREEMPT Wed Sep 13 15:13:51 PDT 2017",
         "RELRO": false,
@@ -2026,7 +2026,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa924-5-k8.bin",
         "version": "9.2.4.5",
         "arch": 32
@@ -2042,7 +2042,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa924-5-smp-k8.bin",
         "version": "9.2.4.5",
         "arch": 64
@@ -2058,7 +2058,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa924-8-k8.bin",
         "version": "9.2.4.8",
         "arch": 32
@@ -2074,7 +2074,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa924-8-smp-k8.bin",
         "version": "9.2.4.8",
         "arch": 64
@@ -2090,7 +2090,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 134512640,
+        "lina_imagebase": 134512640,
         "fw": "asa924-k8.bin",
         "version": "9.2.4",
         "arch": 32
@@ -2106,7 +2106,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa924-smp-k8.bin",
         "version": "9.2.4",
         "arch": 64
@@ -2122,7 +2122,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa931-smp-k8.bin",
         "version": "9.3.1",
         "arch": 64
@@ -2138,7 +2138,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa932-200-smp-k8.bin",
         "version": "9.3.2.200",
         "arch": 64
@@ -2154,7 +2154,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa932-smp-k8.bin",
         "version": "9.3.2",
         "arch": 64
@@ -2170,7 +2170,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa933-11-smp-k8.bin",
         "version": "9.3.3.11",
         "arch": 64
@@ -2186,7 +2186,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa933-7-smp-k8.bin",
         "version": "9.3.3.7",
         "arch": 64
@@ -2202,7 +2202,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa933-9-smp-k8.bin",
         "version": "9.3.3.9",
         "arch": 64
@@ -2218,7 +2218,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa933-smp-k8.bin",
         "version": "9.3.3",
         "arch": 64
@@ -2234,7 +2234,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa941-13-smp-k8.bin",
         "version": "9.4.1.13",
         "arch": 64
@@ -2250,7 +2250,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa941-smp-k8.bin",
         "version": "9.4.1",
         "arch": 64
@@ -2266,7 +2266,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa942-11-smp-k8.bin",
         "version": "9.4.2.11",
         "arch": 64
@@ -2282,7 +2282,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa942-6-smp-k8.bin",
         "version": "9.4.2.6",
         "arch": 64
@@ -2298,7 +2298,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa942-smp-k8.bin",
         "version": "9.4.2",
         "arch": 64
@@ -2314,7 +2314,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa943-12-smp-k8.bin",
         "version": "9.4.3.12",
         "arch": 64
@@ -2330,7 +2330,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa943-smp-k8.bin",
         "version": "9.4.3",
         "arch": 64
@@ -2346,7 +2346,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asa944-smp-k8.bin",
         "version": "9.4.4",
         "arch": 64
@@ -2362,7 +2362,7 @@
         "PIE": true,
         "exported_symbols": false,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asa951-smp-k8.bin",
         "version": "9.5.1",
         "arch": 64
@@ -2378,7 +2378,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asa952-smp-k8.bin",
         "version": "9.5.2",
         "arch": 64
@@ -2394,7 +2394,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asa953-smp-k8.bin",
         "version": "9.5.3",
         "arch": 64
@@ -2410,7 +2410,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asa961-10-smp-k8.bin",
         "version": "9.6.1.10",
         "arch": 64
@@ -2426,7 +2426,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asa961-smp-k8.bin",
         "version": "9.6.1",
         "arch": 64
@@ -2442,7 +2442,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asa962-3-smp-k8.bin",
         "version": "9.6.2.3",
         "arch": 64
@@ -2458,7 +2458,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asa962-smp-k8.bin",
         "version": "9.6.2",
         "arch": 64
@@ -2474,7 +2474,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asa971-smp-k8.bin",
         "version": "9.7.1",
         "arch": 64
@@ -2490,7 +2490,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav932-200.qcow2",
         "version": "9.3.2.200",
         "arch": 64
@@ -2506,7 +2506,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav933-10.qcow2",
         "version": "9.3.3.10",
         "arch": 64
@@ -2522,7 +2522,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav933-11.qcow2",
         "version": "9.3.3.11",
         "arch": 64
@@ -2538,7 +2538,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav933-9.qcow2",
         "version": "9.3.3.9",
         "arch": 64
@@ -2554,7 +2554,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav941-13.qcow2",
         "version": "9.4.1.13",
         "arch": 64
@@ -2570,7 +2570,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav941-200.qcow2",
         "version": "9.4.1.200",
         "arch": 64
@@ -2586,7 +2586,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav941-6.qcow2",
         "version": "9.4.1.6",
         "arch": 64
@@ -2602,7 +2602,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav941.qcow2",
         "version": "9.4.1",
         "arch": 64
@@ -2618,7 +2618,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav942-6.qcow2",
         "version": "9.4.2.6",
         "arch": 64
@@ -2634,7 +2634,7 @@
         "PIE": false,
         "exported_symbols": false,
         "ASLR": false,
-        "imagebase": 4194304,
+        "lina_imagebase": 4194304,
         "fw": "asav942.qcow2",
         "version": "9.4.2",
         "arch": 64
@@ -2650,7 +2650,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asav952-204.qcow2",
         "version": "9.5.2.204",
         "arch": 64
@@ -2666,7 +2666,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asav961.qcow2",
         "version": "9.6.1",
         "arch": 64
@@ -2682,7 +2682,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asav962-2.qcow2",
         "version": "9.6.2.2",
         "arch": 64
@@ -2698,7 +2698,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asav962-7.qcow2",
         "version": "9.6.2.7",
         "arch": 64
@@ -2714,7 +2714,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asav962.qcow2",
         "version": "9.6.2",
         "arch": 64
@@ -2730,7 +2730,7 @@
         "PIE": true,
         "exported_symbols": true,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asav971.qcow2",
         "version": "9.7.1",
         "arch": 64
@@ -2746,7 +2746,7 @@
         "PIE": true,
         "exported_symbols": false,
         "ASLR": true,
-        "imagebase": 93824992231424,
+        "lina_imagebase": 93824992231424,
         "fw": "asav981-5.qcow2",
         "version": "9.8.1.5",
         "arch": 64

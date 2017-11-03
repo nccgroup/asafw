@@ -41,10 +41,7 @@ SCRIPTNAME="unpack_repack_bin"
 log()
 {
     echo -n "[${SCRIPTNAME}] "
-    if [ $# != 0 ];
-    then
-        echo "$@"
-    fi
+    echo "$@"
 }
 
 dbglog()
@@ -976,13 +973,13 @@ then
         unpack_repack_bin
     done
     cd ${ORIGDIR}
-elif [ -f $INPUTFW ]
+elif [ -f ${INPUTFW} ]
 then
     log "Single firmware detected"
     ORIGDIR=${PWD}
-    OUTDIR=$(dirname $INPUTFW)
-    FWFILE=$(basename "$INPUTFW")
-    WORKINGDIR=$(dirname "$INPUTFW")
+    OUTDIR=$(dirname ${INPUTFW})
+    FWFILE=$(basename "${INPUTFW}")
+    WORKINGDIR=$(dirname "${INPUTFW}")
     dbglog "Entering ${WORKINGDIR}"
     cd ${WORKINGDIR}
     unpack_repack_bin

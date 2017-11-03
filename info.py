@@ -210,17 +210,17 @@ def parse_info2(new_r, info):
         else:
             logmsg("ERROR: heap allocator not found")
 
-    # try to guess the imagebase based on experience
+    # try to guess the lina_imagebase based on experience
     if "arch" in new_r.keys() and "ASLR" in new_r.keys():
         if new_r["arch"] == 32:
-            new_r["imagebase"] = 0x8048000
+            new_r["lina_imagebase"] = 0x8048000
         elif new_r["arch"] == 64:
             if new_r["ASLR"] == True:
                 # when ASLR is enabled, we assume it has been disabled by us manually
                 # and this is the address we get until now
-                new_r["imagebase"] = 0x555555554000
+                new_r["lina_imagebase"] = 0x555555554000
             else:
-                new_r["imagebase"] = 0x400000
+                new_r["lina_imagebase"] = 0x400000
 
     return new_r
 
