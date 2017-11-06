@@ -123,7 +123,8 @@ def load_targets(targetdb):
             attempts = 0
             while attempts < max_attempts:
                 try:
-                    with open(targetdb, "rb") as tmp:
+                    # don't use 'rb' because json expects a str
+                    with open(targetdb, "r") as tmp:
                         targets = json.loads(tmp.read())
                 except ValueError:
                     print("[helper] Failed to read valid JSON, trying again in 1 sec")
