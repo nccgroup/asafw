@@ -591,9 +591,13 @@ inject_debugshell()
             CBHOST=${ATTACKER_ASA}
         fi
         log "Adding debug shell for $CBHOST:$CBPORT"
-        log "Using command: ${LINA_LINUXSHELL} -b "$FWFILE" -F $(pwd)/asa/bin/lina_monitor -O $(pwd)/asa/bin/lina_monitor -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" ${ADDITIONAL_ARGS}"
+        LIBC=$(find ${PWD} -name libc.so.6)
+        CMD="${LINA_LINUXSHELL} -b ${FWFILE} -F ${PWD}/asa/bin/lina_monitor -O ${PWD}/asa/bin/lina_monitor -f ${PWD}/asa/bin/lina -o ${PWD}/asa/bin/lina -c $CBHOST -p $CBPORT -d ${ASADBG_DB} ${ADDITIONAL_ARGS} --libc-input ${LIBC} --libc-output ${LIBC}"
+
+        log "Using command: ${CMD}"
         # XXX - fix fact that we use -b to specify the bin_name but it would not work if the name is not one of the original Cisco ones (such as asa924-k8.bin)
-        ${LINA_LINUXSHELL} -b "$FWFILE" -F $(pwd)/asa/bin/lina_monitor -O $(pwd)/asa/bin/lina_monitor -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" ${ADDITIONAL_ARGS}
+        ${CMD}
+
         if [ $? != 0 ];
         then
             echo "${LINA_LINUXSHELL} -b "$FWFILE" -F $(pwd)/asa/bin/lina_monitor -O $(pwd)/asa/bin/lina_monitor -f $(pwd)/asa/bin/lina -o $(pwd)/asa/bin/lina -c $CBHOST -p $CBPORT -d "$ASADBG_DB" failed"

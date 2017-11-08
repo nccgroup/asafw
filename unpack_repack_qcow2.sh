@@ -437,10 +437,11 @@ then
     BIN_CMDLINE="${BIN_CMDLINE} -n"
 fi
 
-if [[ -z $QCOW2FILE || ! -f $QCOW2FILE ]]
+if [[ -z ${QCOW2FILE} || ! -f ${QCOW2FILE} ]]
 then
-    log "[!] You must specify at least a valid -i file: ${QCOW2FILE}"
-    usage
+    log "ERROR: You must specify at least a valid -i file: ${QCOW2FILE}"
+    log "ERROR: Double check your working directory as ${QCOW2FILE} doesn't appear to exist"
+    exit
 fi
 
 if [[ -z $TEMPLATEQCOW2FILE ]]
