@@ -47,7 +47,7 @@ log()
 dbglog()
 {
     if [ ! -z ${DEBUG} ]; then
-        log DEBUGMSG $@
+        log DEBUG: $@
     fi
 }
 
@@ -281,9 +281,15 @@ unpack_bin()
 
     OUTFILE_SUFFIX=
     if [[ "${SIMPLE_NAME}" != "YES" ]]; then
+        # the more complex filename we could get is something like
+        # "asaXXX-smp-k8-noaslr-debugshell-hooked-gdbserver.bin"
+        if [[ "${DISABLE_ASLR}" == "YES" ]] 
+        then
+            OUTFILE_SUFFIX=$OUTFILE_SUFFIX-noaslr
+        fi
         if [[ "${DEBUGSHELL}" == "YES" ]] 
         then
-            OUTFILE_SUFFIX=-debugshell
+            OUTFILE_SUFFIX=$OUTFILE_SUFFIX-debugshell
         fi
         if [[ "${LINAHOOK}" == "YES" ]] 
         then
@@ -899,9 +905,6 @@ do
                 exit 1
             fi
             ;;
-        -v|--verbose)
-            DEBUG="YES"
-            ;;
         --original-firmware)
             ORIGINAL_FIRMWARE="$2"
             shift # past argument
@@ -914,6 +917,9 @@ do
                 exit
             fi
             shift # past argument
+            ;;
+        -v|--verbose)
+            DEBUG="-v"
             ;;
         -h|--help)
             usage

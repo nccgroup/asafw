@@ -12,26 +12,72 @@
 # - actually use the template (TEMPLATEQCOW2FILE)
 # - Probably can use with a ton of cleanup in general
 
+SCRIPTNAME="unpack_repack_qcow2"
+
+# FUNCTIONS
+
 log()
 {
-    echo "[unpack_repack_qcow2] ${1}"
+    echo -n "[${SCRIPTNAME}] "
+    echo "$@"
+}
+
+
+dbglog()
+{
+    if [ ! -z ${DEBUG} ]; then
+        log DEBUG: $@
+    fi
 }
 
 usage()
 {
-    log "Usage:"
-    log "./unpack_repack_qcow2.sh -i <qcow2_file> [-o <out_qcow2_file> -t <template_qcow2_file> --inject-gdb --enable-gdb --disable-gdb --enable-aslr --disable-aslr --enable-root --disable-root --debug-shell --mount-qcow2 --unmount-qcow2 --unpack-only --grub-timeout --inject-grub-config <grub.conf> --inject-bin <multi-bin qcow2>"
-    log "E.g.: ./unpack_repack_qcow2.sh -i /home/user/cisco/firmware/asav961-gns3.qcow2 -t /home/user/cisco/firmware/asav961.qcow2 -m -g -G -a -A -r -R -b"
-    log "E.g.: ./unpack_repack_qcow2.sh -i /home/user/cisco/firmware/asav961-gns3.qcow2 -u"
-    log "E.g.: ./unpack_repack_qcow2.sh -i asav962-7-multiple-bins.qcow2 --inject-grub-conf grub-multi-bin.conf --inject-bin asa962-7-smp-k8-noaslr-backdoor.bin"
+    echo "Usage:"
+    echo "unpack_repack_qcow2.sh -i <qcow2_file> -o <out_dir> [-f -g -G -a -A -m -b -r -u -l <linabin_dir> -d -e -k]"
+    echo "      -h, --help                          This help menu"
+    echo "      -i, --input <qcow2_file>            What QCOW2 file to operate on.  This option is always required"
+    echo "      -t <template_qcow2_file>            XXX"
+    echo "      -o, --output  <out_qcow2_file>      Where to write new QCOW2"
+    echo "      -g, --enable-gdb                    Set gdb to start on boot"
+    echo "      -G, --disable-gdb                   Stop gdb from starting on boot"
+    echo "      -a, --enable-aslr                   Turn on ASLR"
+    echo "      -A, --disable-aslr                  Turn off ASLR"
+    echo "      -r, --enable-root                   Enable root firmware"
+    echo "      -R, --disable-root                  Disable root firmware"
+    echo "      -m, --inject-gdb                    Inject gdbserver to run"
+    echo "      -b, --debug-shell                   Inject ssh-triggered debug shell"
+    echo "      -H, --lina-hook                     Inject hooks for monitor lina heap (requires -b)"
+    echo "      -c, --custom                        Custom functionality you can add yourself"
+    echo "      -u, --unpack-only                   Unpack the asa*.bin firmware inside the QCOW2 and nothing else"
+    echo "      --grub-timeout                      XXXX"
+    echo "      --inject-grub-conf <grub.conf>      XXXX"
+    echo "      --inject-bin <multi-bin qcow2>      XXXX"
+    echo "      --mount-qcow2                       XXXX"
+    echo "      --unmount-qcow2                     XXXX"
+    echo "      -M, --multi-bin                     Indicates if the input qcow2 file is a multi-bin, so we inject the modified asa*.bin in the right partition"
+    echo "      -v, --verbose                       Display debug messages"
+    echo "Examples:"
+    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -A -g -b -H"
+    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -u"
+    echo " unpack_repack_qcow2.sh -i asav962-7-multiple-bins.qcow2 --inject-grub-conf grub-multi-bin.conf --inject-bin asa962-7-smp-k8-noaslr-backdoor.bin"
+    echo "# Inject asa962-7-smp-k8-noaslr-debugshell.bin into multiple-bin QCOW2:"
+    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -M -A -b"
+    echo "# Inject asa962-7-smp-k8-noaslr-debugshell-gdbserver.bin into multiple-bin QCOW2:"
+    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -M -A -b -g -m"
+    echo "# Inject asa962-7-smp-k8-noaslr-debugshell-hooked.bin into multiple-bin QCOW2:"
+    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -M -A -b -H"
+    echo "# Inject asa962-7-smp-k8-noaslr-debugshell-hooked-gdbserver.bin into multiple-bin QCOW2:"
+    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -M -A -b -H -g -m"
     exit
 }
 
 # Parameters:
-# 1 : String : qcow file
-# 2 : Integer: partition
+# 1 : String : path where to mount the qcow2 (e.g. /home/user/mnt/qcow2)
+# 2 : Integer: partition ID (e.g. 1 or 2)
 mount_qcow()
 {
+    dbglog "mount_qcow(${1}, ${2})"
+
     # Just avoid errors in case it's already connected
     mount /dev/nbd0p${2} ${1}
     if [ $? != 0 ]; then
@@ -42,8 +88,13 @@ mount_qcow()
     log "Mounted /dev/nbd0p${2} to ${1}"
 }
 
+# Parameters:
+# 1 : String : path where to mount the qcow2 (e.g. /home/user/mnt/qcow2)
+# 2 : String: path for the input grub.conf (e.g. /path/to/grub.conf)
 inject_grub_config()
 {
+    dbglog "inject_grub_config(${1}, ${2})"
+
     # In a mult-bin qcow partition 1 holds the grub config
     mount_qcow ${1} 1
     cp ${2} ${1}/boot/grub.conf
@@ -51,8 +102,13 @@ inject_grub_config()
     umount ${1}
 }
 
+# Parameters:
+# 1 : String : path where to mount the qcow2 (e.g. /home/user/mnt/qcow2)
+# 3 : String : relative filename for asa*.bin to copy to partition 2 (e.g. asa962-7-smp-k8-noaslr-debugshell.bin)
 inject_multibin()
 {
+    dbglog "inject_multibin(${1}, ${2})"
+
     # In a mult-bin qcow partition 2 holds the extra bin files
     mount_qcow ${1} 2
     cp ${2} ${1}/
@@ -63,14 +119,28 @@ inject_multibin()
 
 # We inherit the name of the qcow2 and apply it to the bin, in case we have
 # duplicates and don't want to overwrite or binwalk the same file name.
+# Parameters:
+# 1 : String : path where to mount the qcow2 (e.g. /home/user/mnt/qcow2)
+# 2 : String : path where to copy the extracted .bin (e.g. /current/folder/bin/asav962-7.qcow2.
+#              Note we copy asa962-7-smp-k8.bin to a asav962-7.qcow2 
+#              so it is known by our asadb.json, for instance to patch lina, but it is a .bin!)
 extract_bin()
 {
-    # Assume a 1 partition qcow
+    dbglog "extract_bin(${1}, ${2})"
+    
+    # A default qcow2 has its asa* in its partition 1
+    # Even if we store additional ones in partition 2 for multiple-bin qcow2, we 
+    # always extract the one from partition 1 as it is untouched
     mount_qcow ${1} 1
-
+    COUNTBIN=$(ls ${1}/asa*.bin|wc -l)
+    if [[ "$COUNTBIN" != "1" ]]; then
+        log "[!] ERROR: Found ${COUNTBIN} asa*.bin in partition 1"
+        umount ${1}
+        exit
+    fi
     BINPATH=$(ls ${1}/asa*.bin)
     if [ $? != 0 ]; then
-        log "[!] Couldn't not find ${1}"
+        log "[!] ERROR: Couldn't not find ${1}/asa*.bin in partition 1"
         umount ${1}
         exit
     fi
@@ -108,11 +178,18 @@ extract_bin()
 
 fini_nbd()
 {
+    dbglog "fini_nbd()"
+
+    log "Disconnecting /dev/nbd0"
     qemu-nbd --disconnect /dev/nbd0  > /dev/null
 }
 
+# Parameters:
+# 1 : String : path to input qcow2 file (e.g. /current/folder/asav962-7.qcow2)
 init_nbd()
 {
+    dbglog "init_nbd(${1})"
+
     qemu-nbd --disconnect /dev/nbd0 > /dev/null
     if [ -z "${1}}" ]; then
         log "[!] init_nbd() expects one argument"
@@ -138,8 +215,14 @@ init_nbd()
 }
 
 ### nbd-based Functions ###
+
+# Parameters:
+# 1 : XXX
+# 2 : XXX
 add_serial()
 {
+    dbglog "add_serial(${1}, ${2})"
+
     init_nbd "${1}"
     MNTDIR="${2}"
     if [ -z "${MNTDIR}" ]; then
@@ -158,7 +241,7 @@ add_serial()
         log "[!] Possibly the wrong qcow as there is no second partition?"
         exit
     fi
-    log "Mounted /dev/nbd02 to ${MNTDIR}"
+    log "Mounted /dev/nbd0p2 to ${MNTDIR}"
     if [ ! -e "${MNTDIR}/coredumpinfo" ]; then
         log "[!] Missing expected coredumpinfo folder"
         log "[!] Are you sure this is the flash qcow?"
@@ -173,9 +256,16 @@ add_serial()
 
 ### Actual workhorse logic ###
 
-# extract_qcow2(qcow2, mnt_dir, outfile)
+# Parameters:
+# 1 : String : path to input qcow2 file (e.g. /current/folder/asav962-7.qcow2)
+# 2 : String : path where to mount the qcow2 (e.g. "/home/user/mnt/qcow2")
+# 3 : String : path where to copy the extracted .bin (e.g. /current/folder/bin/asav962-7.qcow2.
+#              Note we copy asa962-7-smp-k8.bin to a asav962-7.qcow2 
+#              so it is known by our asadb.json, for instance to patch lina, but it is a .bin!)
 extract_qcow2()
 {
+    dbglog "extract_qcow2(${1}, ${2}, ${3})"
+
     QNBD=$(which qemu-nbd)
     if [ -z "${QNBD}" ]; then
         log "[!] qemu-nbd tool not found. Please install or use -o"
@@ -192,61 +282,120 @@ extract_qcow2()
     fini_nbd
 }
 
-# repackage_qcow2(binfile, repacked_name, new_qcow2, mntdir)
+# Parameters:
+# 1 : String : path to repacked asa*.bin file to inject (e.g. /current/folder/bin/asav962-7.qcow2)
+#              Note asav962-7.qcow2 is actually a .bin! We used this name 
+#              so it is known by our asadb.json, for instance to patch lina.)
+# 2 : String : path to temporary repacked asav*.qcow2 file (e.g. /current/folder/bin/asav962-7-repacked.qcow2)
+# 3 : String : path to final repacked asav*.qcow2 file (e.g. /current/folder/asav962-7-repacked.qcow2)
+# 4 : String : path where to mount the qcow2 (e.g. "/home/user/mnt/qcow2")
+# 5 : String : empty by default, set to 1 if a multi-bins qcow2 (so asa*.bin is injected in partition 2)
 repackage_qcow2()
 {
+    dbglog "repackage_qcow2(${1}, ${2}, ${3}, ${4}, multi-bins=${5})"
+
     init_nbd ${3}
     mount /dev/nbd0p1 ${4}
-    log "Mounted /dev/nbd01 to ${4}"
+    log "Mounted /dev/nbd0p1 to ${4}"
     ORIG=$(ls ${4}/asa*.bin)
     if [ $? != 0 ]; then
         log "[!] Couldn't not find ${4}"
         exit
     fi
-    cp ${2} ${ORIG}
+    
+    if [[ -z ${5} ]]; then
+        DEST=${ORIG}
+    else
+        sleep 1
+        umount ${4}
+
+        # get filename without extension and extension
+        OUTFILE=$(basename "$ORIG")
+        EXTFILE=${ORIG##*.}
+
+        OUTFILE_SUFFIX=
+        # the more complex filename we could get is something like
+        # "asaXXX-smp-k8-noaslr-debugshell-hooked-gdbserver.bin"
+        if [[ ! -z "${DISABLE_ASLR}" ]] 
+        then
+            OUTFILE_SUFFIX=$OUTFILE_SUFFIX-noaslr
+        fi
+        if [[ ! -z "${DEBUGSHELL}" ]] 
+        then
+            OUTFILE_SUFFIX=$OUTFILE_SUFFIX-debugshell
+        fi
+        if [[ ! -z "${LINAHOOK}" ]]
+        then
+            OUTFILE_SUFFIX=$OUTFILE_SUFFIX-hooked
+        fi
+        if [[ ! -z "${ENABLE_GDB}" ]]
+        then
+            OUTFILE_SUFFIX=$OUTFILE_SUFFIX-gdbserver
+        fi
+        OUTFILE_SUFFIX=$OUTFILE_SUFFIX.${EXTFILE}
+        DEST=${4}/${OUTFILE%.*}${OUTFILE_SUFFIX}
+        log "Destination file: ${DEST}"
+
+        mount /dev/nbd0p2 ${4}
+        log "Mounted /dev/nbd0p2 to ${4}"
+    fi
+    
+    cp ${2} ${DEST}
     if [ $? != 0 ]; then
         log "[!] Couldn't not find repacked name: ${2}"
         exit
     fi
-    log "Moved modified .bin inside of ${3}"
+    log "Moved modified .bin in ${DEST} inside of ${3}"
     umount ${4}
     fini_nbd
     log "Unmounted ${4}"
 }
 
+# Parameters:
+# 1 : XXX
+# 2 : XXX
+# 3 : XXX
 extract_one()
 {
+    dbglog "extract_one(${1}, ${2}, ${3})"
+
     log "extract_one: $QCOW2FILE"
 
     extract_qcow2 ${QCOW2FILE} ${QCOW2MNT} ${BINFILE}
 
     # XXX - we generally want to avoid using -k as we want to keep the kernel to get the kernel version
     # but we may want to support it in case we want to only keep the rootfs for debugging
-    #${UNPACK_REPACK_BIN} -i ${BINFILE} -u -k
-    ${UNPACK_REPACK_BIN} -i ${BINFILE} -u
+    #${UNPACK_REPACK_BIN} -i ${BINFILE} -u -k ${DEBUG}
+    ${UNPACK_REPACK_BIN} -i ${BINFILE} -u ${DEBUG}
     FWFOLDER=${QCOWDIR}/bin/_${BASEQCOW2FILE_NOEXT}.qcow2.extracted
     if [ ! -d "${FWFOLDER}" ]; then
         log "Error: binwalk extraction failed. Didn't find ${FWFOLDER}"
         exit
     fi
     mv ${FWFOLDER} ${QCOWDIR}/
-    if [[ "$DEBUG" == "NO" ]];
+    if [ -z ${DEBUG} ]
     then
     #rm ${BINFILE} ${BINFILE_REPACKED} ${BINFILE_REPACKED2}
         rm ${BINFILE}
     fi
 }
 
+# Parameters:
+# 1 : XXX
+# 2 : XXX
+# 3 : XXX
 extract_repack_one()
 {
+    dbglog "extract_repack_one(${1}, ${2}, ${3})"
+
     log "extract_repack_one: $QCOW2FILE"
 
     extract_qcow2 ${QCOW2FILE} ${QCOW2MNT} ${BINFILE}
 
-    ${UNPACK_REPACK_BIN} -i ${BINFILE} ${BIN_CMDLINE} -s
+    ${UNPACK_REPACK_BIN} -i ${BINFILE} ${BIN_CMDLINE} -s ${DEBUG}
     if [ $? != 0 ];
     then
-        log ${UNPACK_REPACK_BIN} -i ${BINFILE} ${BIN_CMDLINE} -s failed
+        log ${UNPACK_REPACK_BIN} -i ${BINFILE} ${BIN_CMDLINE} -s ${DEBUG} failed
         exit
     fi
 
@@ -279,9 +428,14 @@ extract_repack_one()
     fi
 
     cp ${QCOW2FILE} ${OUTQCOW2FILE}
-    repackage_qcow2 ${BINFILE} ${BINFILE_REPACKED2} ${OUTQCOW2FILE} ${QCOW2MNT}
+    if [[ "${MULTI_BIN}" == "YES" ]]
+    then
+        repackage_qcow2 ${BINFILE} ${BINFILE_REPACKED2} ${OUTQCOW2FILE} ${QCOW2MNT} 1
+    else
+        repackage_qcow2 ${BINFILE} ${BINFILE_REPACKED2} ${OUTQCOW2FILE} ${QCOW2MNT}
+    fi
 
-    if [[ "$DEBUG" == "NO" ]];
+    if [ -z ${DEBUG} ]
     then
         if [[ "${BINFILE_REPACKED}" == "${BINFILE_REPACKED2}" ]]
         then
@@ -328,12 +482,14 @@ QCOW_PARTNUM=1
 INJECT_GDB=
 CUSTOM=
 DEBUGSHELL=
+LINAHOOK=
 # do we keep temporary files? Use if need to debug
-DEBUG="NO"
+DEBUG=
 UNPACK_ONLY="NO"
 GRUB_TIMEOUT="NO"
 INJECT_GRUBCONFIG="NO"
 INJECT_MULTIBIN="NO"
+MULTI_BIN="NO"
 while [[ $# -gt 0 ]]
 do
     key="$1"
@@ -341,10 +497,6 @@ do
     case $key in
         -i|--input)
         QCOW2FILE="$2"
-        shift # past argument
-        ;;
-        --debug)
-        DEBUG="YES"
         shift # past argument
         ;;
         -o|--output)
@@ -383,6 +535,9 @@ do
         -b|--debug-shell)
         DEBUGSHELL=" -b"
         ;;
+        -H|--lina-hook)
+        LINAHOOK=" -H"
+        ;;
         -s|--enable-serial)
         ENABLE_SERIAL="YES"
         ;;
@@ -414,6 +569,12 @@ do
         INJECT_BIN="${2}"
         shift # past argument
         ;;
+        -M|--multi-bin)
+        MULTI_BIN="YES"
+        ;;
+        -v|--verbose)
+        DEBUG="-v"
+        ;;
         -h|*)
         # unknown option
         log "[!] Unknown option provided: $key"
@@ -431,8 +592,9 @@ if [ "$(whoami)" != "root" ]; then
     exit
 fi
 
-BIN_CMDLINE="-f ${ENABLE_GDB}${DISABLE_GDB}${ENABLE_ASLR}${DISABLE_ASLR}${INJECT_GDB}${CUSTOM}${DEBUGSHELL}"
-if [[ "$DEBUG" == "YES" ]]
+# Will always force to free space in the .bin with -f
+BIN_CMDLINE="-f ${ENABLE_GDB}${DISABLE_GDB}${ENABLE_ASLR}${DISABLE_ASLR}${INJECT_GDB}${CUSTOM}${DEBUGSHELL}${LINAHOOK}"
+if [ ! -z ${DEBUG} ]
 then
     BIN_CMDLINE="${BIN_CMDLINE} -n"
 fi
@@ -511,7 +673,7 @@ else
     # 1. our database contains actual .qcow2 name so we need this when patching "lina" to the right offsets
     # 2. binwalk will create a folder with the .bin name so we need it to also match the actual .qcow2 so
     #    it is correct when debugging
-    mkdir ${QCOWDIR}/bin
+    mkdir ${QCOWDIR}/bin &> /dev/null
     BINFILE=${QCOWDIR}/bin/${BASEQCOW2FILE_NOEXT}.qcow2
 
     if [[ "$UNPACK_ONLY" == "YES" ]]
