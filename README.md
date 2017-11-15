@@ -1,5 +1,9 @@
 # asafw
 
+Preliminary note: we recommend you to use this as part of 
+[asatools](https://github.com/nccgroup/asatools) but it can also be used 
+standalone.
+
 **asafw** is a set of scripts to deal with Cisco ASA firmware. It allows
 someone to unpack firmware required when debugging with gdb, as well as
 unpacking/repacking them in order to enable certain features such as:

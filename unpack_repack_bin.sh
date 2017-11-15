@@ -91,6 +91,8 @@ usage()
     echo " ./unpack_repack_bin.sh -u -i /home/user/firmware/asa924-k8.bin -k"
     echo " # Repack an already unpacked firmware dir, freeing space and patching lina_monitor to bypass checksum validation"
     echo " ./unpack_repack_bin.sh --repack-only -i _asa924-smp-k8.bin.extracted --output-bin asa924-smp-k8-repacked.bin --original-firmware /home/user/firmware/asa924-smp-k8.bin --free-space --replace-linamonitor /home/user/firmware/lina_monitor_patched"
+    echo " # Unpack and repack a firmware file, freeing space, enabling gdb, debug shell and linahook" 
+    echo " ./unpack_repack_bin.sh -i asa924-smp-k8.bin -f -g -b -H"
     exit 1
 }
 
