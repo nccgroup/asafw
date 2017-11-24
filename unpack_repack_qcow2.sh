@@ -160,18 +160,21 @@ extract_bin()
     # the architecture of this script so we only mount at the beginning 
     # and unmount at the end so we can do all modifications in between
     # in one function
-    if [[ "$GRUB_TIMEOUT" == "YES" ]]
+    if [[ ! -z ${GRUB_TIMEOUT} ]]
     then
         # default timeout is 10 seconds but we speed the process of booting by setting it to 1 :)
-        log "GRUB TIMEOUT set to 1"
-        sed -i 's/timeout \(.*\)/timeout 1/' ${QCOW2MNT}/boot/grub.conf
+        log "GRUB TIMEOUT set to ${GRUB_TIMEOUT}"
+        # XXX - running the cmd via the variable fails 
+        SEDCMD="sed -i 's/timeout \(.*\)/timeout ${GRUB_TIMEOUT}/' ${QCOW2MNT}/boot/grub.conf"
+        sed -i 's/timeout \(.*\)/timeout ${GRUB_TIMEOUT}/' ${QCOW2MNT}/boot/grub.conf
         if [ $? != 0 ];
         then
-            log "sed -i 's/timeout \(.*\)/timeout 1/' ${QCOW2MNT}/boot/grub.conf failed"
+            log "${SEDCMD} failed"
+            umount ${1}
             exit
         fi
     fi
-    
+
     umount ${1}
     log "Unmounted ${1}"
 }
@@ -205,6 +208,10 @@ init_nbd()
     log "Mounting ${1} to /dev/nbd0"
     qemu-nbd --connect=/dev/nbd0 "${1}"
 
+    # At some point this changed, and we have to probe?
+    # solution found here:
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=824553
+    partprobe /dev/nbd0
     PARTCOUNT=$(fdisk /dev/nbd0 -l | grep nbd0p | wc -l)
     if [ "${PARTCOUNT}" == 0 ]; then
         log "[!] Something wrong with qcow? No partitions detected"
@@ -302,7 +309,7 @@ repackage_qcow2()
         log "[!] Couldn't not find ${4}"
         exit
     fi
-    
+
     if [[ -z ${5} ]]; then
         DEST=${ORIG}
     else
@@ -339,13 +346,13 @@ repackage_qcow2()
         mount /dev/nbd0p2 ${4}
         log "Mounted /dev/nbd0p2 to ${4}"
     fi
-    
+
     cp ${2} ${DEST}
     if [ $? != 0 ]; then
         log "[!] Couldn't not find repacked name: ${2}"
         exit
     fi
-    log "Moved modified .bin in ${DEST} inside of ${3}"
+    log "Injected ${3} with new .bin file ${DEST}"
     umount ${4}
     fini_nbd
     log "Unmounted ${4}"
@@ -486,7 +493,7 @@ LINAHOOK=
 # do we keep temporary files? Use if need to debug
 DEBUG=
 UNPACK_ONLY="NO"
-GRUB_TIMEOUT="NO"
+GRUB_TIMEOUT=
 INJECT_GRUBCONFIG="NO"
 INJECT_MULTIBIN="NO"
 MULTI_BIN="NO"
@@ -558,7 +565,7 @@ do
         UNPACK_ONLY="YES"
         ;;
         --grub-timeout)
-        GRUB_TIMEOUT="YES"
+        GRUB_TIMEOUT="${2}"
         shift # past argument
         ;;
         --inject-grub-conf)
@@ -647,20 +654,17 @@ if [ ! -z "${QCOW_UMOUNT}" ]; then
     exit
 fi
 
-if [[ ! -z "$INJECT_GRUB_CONF" && -z "$INJECT_BIN" ]]; then
-    log "ERROR: grub.conf injection currently requires --inject-bin"
-    exit
+if [[ ! -z "${INJECT_GRUB_CONF}" ]]; then
+    init_nbd ${QCOW2FILE}
+    echo "Injecting grub config"
+    inject_grub_config ${QCOW2MNT} ${INJECT_GRUB_CONF}
+    fini_nbd
 fi
 
 if [[ ! -z "$INJECT_BIN" ]]; then
     init_nbd ${QCOW2FILE}
-    if [[ ! -z "${INJECT_GRUB_CONF}" ]]; then
-        echo "Injecting grub config"
-        inject_grub_config ${QCOW2MNT} ${INJECT_GRUB_CONF}
-    fi
     log "Injecting ${INJECT_BIN} into ${QCOW2FILE}"
     inject_multibin ${QCOW2MNT} ${INJECT_BIN}
-
     fini_nbd
 else
     log "Using input qcow2 file: ${QCOW2FILE}"
@@ -668,11 +672,12 @@ else
     log "Using output qcow2 file: ${OUTQCOW2FILE}"
     log "Command line: ${BIN_CMDLINE}"
 
-    # Work is done in a "bin" directory because we use the same name for the .bin
-    # that for the .qcow2. This is for several reasons:
-    # 1. our database contains actual .qcow2 name so we need this when patching "lina" to the right offsets
-    # 2. binwalk will create a folder with the .bin name so we need it to also match the actual .qcow2 so
-    #    it is correct when debugging
+    # Work is done in a "bin" directory because we use the same name for both  
+    # the .bin and the .qcow2 file. This is for several reasons:
+    # 1. our target database contains a .qcow2 name so we need this when 
+    #    patching "lina" to the right target offsets
+    # 2. binwalk will create a folder with the .bin name so we need it to also 
+    #    match the actual .qcow2 so it is correct when debugging
     mkdir ${QCOWDIR}/bin &> /dev/null
     BINFILE=${QCOWDIR}/bin/${BASEQCOW2FILE_NOEXT}.qcow2
 
