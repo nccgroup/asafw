@@ -293,7 +293,7 @@ unpack_bin()
         then
             OUTFILE_SUFFIX=$OUTFILE_SUFFIX-debugshell
         fi
-        if [[ "${LINAHOOK}" == "YES" ]] 
+        if [[ ! -z "${LINAHOOK}" ]] 
         then
             OUTFILE_SUFFIX=$OUTFILE_SUFFIX-hooked
         fi
@@ -585,9 +585,9 @@ inject_debugshell()
     if [[ "$DEBUGSHELL" == "YES" ]]
     then
         ADDITIONAL_ARGS=""
-        if [[ "${LINAHOOK}" == "YES" ]]
+        if [[ ! -z "${LINAHOOK}" ]]
         then
-            ADDITIONAL_ARGS="--hook"
+            ADDITIONAL_ARGS="--hook ${LINAHOOK}"
         fi
         CBPORT="4444"
         if [[ "$FWFILE" == *"asav"* ]]
@@ -807,7 +807,7 @@ INJECT_GDB="NO"
 CUSTOM="NO"
 NO_CLEANUP="NO"
 DEBUGSHELL="NO"
-LINAHOOK="NO"
+LINAHOOK=
 ROOT="NO"
 LINABINDIR=
 DELETE_EXTRACTED="NO"
@@ -862,7 +862,8 @@ do
             DEBUGSHELL="YES"
             ;;
         -H|--lina-hook)
-            LINAHOOK="YES"
+            LINAHOOK="$2"
+            shift
             ;;
         -c|--custom)
             CUSTOM="YES"
@@ -959,7 +960,7 @@ then
     usage
 fi
 
-if [[ "${LINAHOOK}" == "YES" && "${DEBUGSHELL}" == "NO" ]]
+if [[ ! -z "${LINAHOOK}" && "${DEBUGSHELL}" == "NO" ]]
 then
     log "ERROR: Use of --lina-hook (-H) currently requires --debug-shell (-b)"
     usage

@@ -46,7 +46,7 @@ usage()
     echo "      -R, --disable-root                  Disable root firmware"
     echo "      -m, --inject-gdb                    Inject gdbserver to run"
     echo "      -b, --debug-shell                   Inject ssh-triggered debug shell"
-    echo "      -H, --lina-hook                     Inject hooks for monitor lina heap (requires -b)"
+    echo "      -H, --lina-hook <hooks to install>  Inject lina hooks (requires -b)"
     echo "      -c, --custom                        Custom functionality you can add yourself"
     echo "      -u, --unpack-only                   Unpack the asa*.bin firmware inside the QCOW2 and nothing else"
     echo "      --grub-timeout                      XXXX"
@@ -57,7 +57,7 @@ usage()
     echo "      -M, --multi-bin                     Indicates if the input qcow2 file is a multi-bin, so we inject the modified asa*.bin in the right partition"
     echo "      -v, --verbose                       Display debug messages"
     echo "Examples:"
-    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -A -g -b -H"
+    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -A -g -b -H hat"
     echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -u"
     echo " unpack_repack_qcow2.sh -i asav962-7-multiple-bins.qcow2 --inject-grub-conf grub-multi-bin.conf --inject-bin asa962-7-smp-k8-noaslr-backdoor.bin"
     echo "# Inject asa962-7-smp-k8-noaslr-debugshell.bin into multiple-bin QCOW2:"
@@ -65,9 +65,9 @@ usage()
     echo "# Inject asa962-7-smp-k8-noaslr-debugshell-gdbserver.bin into multiple-bin QCOW2:"
     echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -M -A -b -g -m"
     echo "# Inject asa962-7-smp-k8-noaslr-debugshell-hooked.bin into multiple-bin QCOW2:"
-    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -M -A -b -H"
+    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -M -A -b -H hat"
     echo "# Inject asa962-7-smp-k8-noaslr-debugshell-hooked-gdbserver.bin into multiple-bin QCOW2:"
-    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -M -A -b -H -g -m"
+    echo " unpack_repack_qcow2.sh -i asav962-7.qcow2 -M -A -b -H hat -g -m"
     exit
 }
 
@@ -543,7 +543,8 @@ do
         DEBUGSHELL=" -b"
         ;;
         -H|--lina-hook)
-        LINAHOOK=" -H"
+        LINAHOOK=" -H $2"
+        shift
         ;;
         -s|--enable-serial)
         ENABLE_SERIAL="YES"
