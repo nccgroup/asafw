@@ -973,8 +973,10 @@ then
     log "Directory of firmware detected: $INPUTFW"
     ORIGDIR=${PWD}
     cd ${INPUTFW}
-    for FWFILE in $(find . -name "*.bin" -maxdepth 0 -type f);
+    for FWFILE2 in $(find . -maxdepth 1 -type f -name "*.bin");
     do
+        # strip "./" in front of the file
+        FWFILE=$(basename "${FWFILE2}")
         unpack_repack_bin
     done
     cd ${ORIGDIR}
