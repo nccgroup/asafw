@@ -92,7 +92,7 @@ usage()
     echo " # Repack an already unpacked firmware dir, freeing space and patching lina_monitor to bypass checksum validation"
     echo " ./unpack_repack_bin.sh --repack-only -i _asa924-smp-k8.bin.extracted --output-bin asa924-smp-k8-repacked.bin --original-firmware /home/user/firmware/asa924-smp-k8.bin --free-space --replace-linamonitor /home/user/firmware/lina_monitor_patched"
     echo " # Unpack and repack a firmware file, freeing space, enabling gdb, debug shell and linahook" 
-    echo " ./unpack_repack_bin.sh -i asa924-smp-k8.bin -f -g -b -H"
+    echo " ./unpack_repack_bin.sh -i asa924-smp-k8.bin -f -g -b -H hat"
     exit 1
 }
 
@@ -942,9 +942,15 @@ then
     usage
 fi
 
-if [[ -d $INPUTFW && -z $OUTDIR && -z $OUTBIN ]]
+if [[ -d $INPUTFW && -z $OUTDIR && -z $OUTBIN && "${UNPACK_ONLY}" == "NO" ]]
 then
     log "ERROR: You must specify an output directory with --output (-o) when specifying a directory with --input (-i)"
+    usage
+fi
+
+if [[ ! -z $OUTDIR && "${UNPACK_ONLY}" == "YES" ]]
+then
+    log "ERROR: --output (-o) is ignored if --unpack-only (-u) is specified"
     usage
 fi
 

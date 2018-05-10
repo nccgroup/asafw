@@ -216,7 +216,52 @@ The remaining files for `asa981-smp-*` are there because of the failure. You can
 use the idahunt scripts in [asadbg](https://github.com/nccgroup/asadbg) to 
 import the new `lina`. You can more specifically refer to the 
 `Importing additional symbols` section in the 
-[README](https://github.com/nccgroup/asadbg/README.md#Importing additional symbols).
+[README](https://github.com/nccgroup/asadbg/blob/master/README.md#importing-additional-symbols).
+
+## Retrieve lina and co files for future analysis
+
+Because firmware files are quite big, and extracted files are even worse, it may be interesting 
+to extract each firmware,  get the `lina`, `lina_monitor` files and then delete temporary 
+extracted files.
+
+You can do it with the following command line:
+
+```
+$ unpack_repack_bin.sh -u -i /home/user/fw/ --linabins /home/user/linabins/ --delete-extracted
+[unpack_repack_bin] Created /home/user/linabins/ directory
+[unpack_repack_bin] Directory of firmware detected: /home/user/fw/
+[unpack_repack_bin] extract_bin: asa924-25-k8.bin
+[unpack_repack_bin] Extracted firmware to /home/user/fw/_asa924-25-k8.bin.extracted
+[unpack_repack_bin] Firmware uses regular rootfs/ dir
+[unpack_repack_bin] Extracting /home/user/fw/_asa924-25-k8.bin.extracted/rootfs/rootfs.img into /home/user/fw/_asa924-25-k8.bin.extracted/rootfs
+[unpack_repack_bin] Deleting extracted files
+[unpack_repack_bin] Deleting "/home/user/fw/_asa924-25-k8.bin.extracted"
+[unpack_repack_bin] extract_bin: asa924-27-k8.bin
+[unpack_repack_bin] Extracted firmware to /home/user/fw/_asa924-27-k8.bin.extracted
+[unpack_repack_bin] Firmware uses regular rootfs/ dir
+[unpack_repack_bin] Extracting /home/user/fw/_asa924-27-k8.bin.extracted/rootfs/rootfs.img into /home/user/fw/_asa924-27-k8.bin.extracted/rootfs
+[unpack_repack_bin] Deleting extracted files
+[unpack_repack_bin] Deleting "/home/user/fw/_asa924-27-k8.bin.extracted"
+[unpack_repack_bin] extract_bin: asa924-k8.bin
+[unpack_repack_bin] Extracted firmware to /home/user/fw/_asa924-k8.bin.extracted
+[unpack_repack_bin] Firmware uses regular rootfs/ dir
+[unpack_repack_bin] Extracting /home/user/fw/_asa924-k8.bin.extracted/rootfs/rootfs.img into /home/user/fw/_asa924-k8.bin.extracted/rootfs
+[unpack_repack_bin] Deleting extracted files
+[unpack_repack_bin] Deleting "/home/user/fw/_asa924-k8.bin.extracted"
+$ tree /home/user/linabins/
+/home/user/linabins/
+├── asa924-25-k8.bin
+│   ├── lina
+│   └── lina_monitor
+├── asa924-27-k8.bin
+│   ├── lina
+│   └── lina_monitor
+└── asa924-k8.bin
+    ├── lina
+    └── lina_monitor
+
+3 directories, 6 files
+```
 
 # unpack_repack_qcow2.sh
 
