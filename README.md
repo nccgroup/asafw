@@ -360,6 +360,85 @@ debugging the firmware with gdb after loading it with GNS3:
 The obtained `/home/user/fw_qcow2/asav962-7-repacked.qcow2` has both gdb enabled
 at boot and ASLR disabled.
 
+
+## Retrieve lina and co files for future analysis
+
+Similarly to the `asa*.bin` files, but with a different command line and as root:
+
+```
+# for QCOW2FILE in $(find /home/user/fw/*); do echo --- Handling $QCOW2FILE; unpack_repack_qcow2.sh -u -i $QCOW2FILE; done
+--- Handling /home/user/fw/asav962-2.qcow2
+[unpack_repack_qcow2] Using input qcow2 file: /home/user/fw/asav962-2.qcow2
+[unpack_repack_qcow2] Using template qcow2 file: /home/user/fw/asav962-2.qcow2
+[unpack_repack_qcow2] Using output qcow2 file: /home/user/fw/asav962-2-repacked.qcow2
+[unpack_repack_qcow2] Command line: -f 
+[unpack_repack_qcow2] extract_one: /home/user/fw/asav962-2.qcow2
+[unpack_repack_qcow2] Mounting /home/user/fw/asav962-2.qcow2 to /dev/nbd0
+[unpack_repack_qcow2] Mounted /dev/nbd0p1 to /home/user/mnt/qcow2
+[unpack_repack_qcow2] Copied asa962-2-smp-k8.bin to /home/user/fw/bin/asav962-2.qcow2
+[unpack_repack_qcow2] Unmounted /home/user/mnt/qcow2
+[unpack_repack_qcow2] Disconnecting /dev/nbd0
+[unpack_repack_bin] Single firmware detected
+[unpack_repack_bin] extract_bin: asav962-2.qcow2
+[unpack_repack_bin] Extracted firmware to /home/user/fw/bin/_asav962-2.qcow2.extracted
+[unpack_repack_bin] Firmware uses regular rootfs/ dir
+[unpack_repack_bin] Extracting /home/user/fw/bin/_asav962-2.qcow2.extracted/rootfs/rootfs.img into /home/user/fw/bin/_asav962-2.qcow2.extracted/rootfs
+--- Handling /home/user/fw/asav962-7.qcow2
+[unpack_repack_qcow2] Using input qcow2 file: /home/user/fw/asav962-7.qcow2
+[unpack_repack_qcow2] Using template qcow2 file: /home/user/fw/asav962-7.qcow2
+[unpack_repack_qcow2] Using output qcow2 file: /home/user/fw/asav962-7-repacked.qcow2
+[unpack_repack_qcow2] Command line: -f 
+[unpack_repack_qcow2] extract_one: /home/user/fw/asav962-7.qcow2
+[unpack_repack_qcow2] Mounting /home/user/fw/asav962-7.qcow2 to /dev/nbd0
+[unpack_repack_qcow2] Mounted /dev/nbd0p1 to /home/user/mnt/qcow2
+[unpack_repack_qcow2] Copied asa962-7-smp-k8.bin to /home/user/fw/bin/asav962-7.qcow2
+[unpack_repack_qcow2] Unmounted /home/user/mnt/qcow2
+[unpack_repack_qcow2] Disconnecting /dev/nbd0
+[unpack_repack_bin] Single firmware detected
+[unpack_repack_bin] extract_bin: asav962-7.qcow2
+[unpack_repack_bin] Extracted firmware to /home/user/fw/bin/_asav962-7.qcow2.extracted
+[unpack_repack_bin] Firmware uses regular rootfs/ dir
+[unpack_repack_bin] Extracting /home/user/fw/bin/_asav962-7.qcow2.extracted/rootfs/rootfs.img into /home/user/fw/bin/_asav962-7.qcow2.extracted/rootfs
+--- Handling /home/user/fw/asav962.qcow2
+[unpack_repack_qcow2] Using input qcow2 file: /home/user/fw/asav962.qcow2
+[unpack_repack_qcow2] Using template qcow2 file: /home/user/fw/asav962.qcow2
+[unpack_repack_qcow2] Using output qcow2 file: /home/user/fw/asav962-repacked.qcow2
+[unpack_repack_qcow2] Command line: -f 
+[unpack_repack_qcow2] extract_one: /home/user/fw/asav962.qcow2
+[unpack_repack_qcow2] Mounting /home/user/fw/asav962.qcow2 to /dev/nbd0
+[unpack_repack_qcow2] Mounted /dev/nbd0p1 to /home/user/mnt/qcow2
+[unpack_repack_qcow2] Copied asa962-smp-k8.bin to /home/user/fw/bin/asav962.qcow2
+[unpack_repack_qcow2] Unmounted /home/user/mnt/qcow2
+[unpack_repack_qcow2] Disconnecting /dev/nbd0
+[unpack_repack_bin] Single firmware detected
+[unpack_repack_bin] extract_bin: asav962.qcow2
+[unpack_repack_bin] Extracted firmware to /home/user/fw/bin/_asav962.qcow2.extracted
+[unpack_repack_bin] Firmware uses regular rootfs/ dir
+[unpack_repack_bin] Extracting /home/user/fw/bin/_asav962.qcow2.extracted/rootfs/rootfs.img into /home/user/fw/bin/_asav962.qcow2.extracted/rootfs
+# cd /home/user/fw/
+# linabins.sh /home/user/linabins
+_asav962-2.qcow2.extracted/rootfs/asa/bin/lina
+_asav962-2.qcow2.extracted/rootfs/asa/bin/lina_monitor
+_asav962-7.qcow2.extracted/rootfs/asa/bin/lina
+_asav962-7.qcow2.extracted/rootfs/asa/bin/lina_monitor
+_asav962.qcow2.extracted/rootfs/asa/bin/lina
+_asav962.qcow2.extracted/rootfs/asa/bin/lina_monitor
+# tree /home/user/linabins
+/home/user/linabins
+├── asav962-2.qcow2
+│   ├── lina
+│   └── lina_monitor
+├── asav962-7.qcow2
+│   ├── lina
+│   └── lina_monitor
+└── asav962.qcow2
+    ├── lina
+    └── lina_monitor
+
+3 directories, 6 files
+
+```
+
 # Firmware helpers
 
 ## bin.py
