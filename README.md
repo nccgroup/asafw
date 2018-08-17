@@ -24,6 +24,7 @@ keep the right permissions.
 ## Requirements
 
 * Python3 only
+	* apt install binwalk
 * Heavily tested on Linux (but could work on OS X to)
 
 You initially need to modify `asafw/env.sh` to match your environment. It will
@@ -86,10 +87,11 @@ asa924-k8.bin  asa981-smp-k8.bin
 If you only want to extract firmware, e.g. to debug them with
 [asadbg](https://github.com/nccgroup/asadbg), you can use `-u` to unpack only
 and `-k` to only keep the rootfs and delete other files extracted by binwalk
-that you don't need:
+that you don't need. Note that the output folder is the same as the input folder
+as we rely on binwalk for this:
 
 ```
-~/fw$ unpack_repack_bin.sh -i . -o . -k -u
+~/fw$ unpack_repack_bin.sh -i . -k -u
 [unpack_repack_bin] Directory of firmware detected: .
 [unpack_repack_bin] extract_one: asa924-k8.bin
 
