@@ -236,6 +236,10 @@ def main():
                         help="Input bin name")
     parser.add_argument('-o', dest='lina_file_out', default=None, \
                         help="Output lina file")
+    parser.add_argument('--libc-input', dest='libc_input', default=None, \
+                        help="Input libc file")
+    parser.add_argument('--libc-output', dest='libc_output', default=None, \
+                        help="Output libc file")
     parser.add_argument('-O', dest='lina_monitor_file_out', default=None, \
                         help="Output lina_monitor file (only in ASAv 64-bit)")
     parser.add_argument('-v', dest='verbose', default=False, 
