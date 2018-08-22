@@ -65,6 +65,7 @@ usage()
     echo "      -A, --disable-aslr           Turn off ASLR"
     echo "      -m, --inject-gdb             Inject gdbserver to run"
     echo "      -b, --debug-shell            Inject ssh-triggered debug shell"
+    echo "      -B, --serial-shell           Configure a serial shell on ASA 2nd serial port"
     echo "      -H, --lina-hook              Inject hooks for monitor lina heap (requires -b)"
     echo "      -r, --root                   Root the bin to get a rootshell on boot"
     echo "      -c, --custom                 Custom functionality you can add yourself"
@@ -81,9 +82,9 @@ usage()
     echo "      --original-firmware <name>   Name of original firmware file. for use with --repack-only"
     echo "      -v, --verbose                Display debug messages"
     echo "Examples:"
-    echo " # Unpack and repack a firmware file, freeing space, enabling gdb, and injecting gdbserver bin. Output modifications to firmware_repacked fir" 
+    echo " # Unpack and repack a firmware file, freeing space, enabling gdb, and injecting gdbserver bin. Output modifications to firmware_repacked dir"
     echo " ./unpack_repack_bin.sh -i /home/user/firmware -o /home/user/firmware_repacked --free-space --enable-gdb --inject-gdb"
-    echo " # Unpack and repack a firmware file, freeing space, enabling gdb, and injecting gdbserver bin" 
+    echo " # Unpack and repack a firmware file, freeing space, enabling gdb, and injecting gdbserver bin"
     echo " ./unpack_repack_bin.sh -i /home/user/firmware/asa961-smp-k8.bin -f -g -m"
     echo " # Unpack a firmware file and copy the lina and lina_monitor file in to linabins dir"
     echo " ./unpack_repack_bin.sh -u -i /home/user/firmware -l /home/user/linabins"
@@ -91,7 +92,7 @@ usage()
     echo " ./unpack_repack_bin.sh -u -i /home/user/firmware/asa924-k8.bin -k"
     echo " # Repack an already unpacked firmware dir, freeing space and patching lina_monitor to bypass checksum validation"
     echo " ./unpack_repack_bin.sh --repack-only -i _asa924-smp-k8.bin.extracted --output-bin asa924-smp-k8-repacked.bin --original-firmware /home/user/firmware/asa924-smp-k8.bin --free-space --replace-linamonitor /home/user/firmware/lina_monitor_patched"
-    echo " # Unpack and repack a firmware file, freeing space, enabling gdb, debug shell and linahook" 
+    echo " # Unpack and repack a firmware file, freeing space, enabling gdb, debug shell and linahook"
     echo " ./unpack_repack_bin.sh -i asa924-smp-k8.bin -f -g -b -H hat"
     exit 1
 }
@@ -165,7 +166,7 @@ extract_bin()
     fi
     cd ${FWFOLDER}
     # better safe than sorry. If we can't go in, when we go out later
-    # we will go back in the arborescence and do bad stuff, such as delete 
+    # we will go back in the arborescence and do bad stuff, such as delete
     # files, etc...
     if [ $? != 0 ];
     then
@@ -285,28 +286,28 @@ unpack_bin()
     if [[ "${SIMPLE_NAME}" != "YES" ]]; then
         # the more complex filename we could get is something like
         # "asaXXX-smp-k8-noaslr-debugshell-hooked-gdbserver.bin"
-        if [[ "${DISABLE_ASLR}" == "YES" ]] 
+        if [[ "${DISABLE_ASLR}" == "YES" ]]
         then
             OUTFILE_SUFFIX=$OUTFILE_SUFFIX-noaslr
         fi
-        if [[ "${DEBUGSHELL}" == "YES" ]] 
+        if [[ "${DEBUGSHELL}" == "YES" ]]
         then
             OUTFILE_SUFFIX=$OUTFILE_SUFFIX-debugshell
         fi
-        if [[ ! -z "${LINAHOOK}" ]] 
+        if [[ ! -z "${LINAHOOK}" ]]
         then
             OUTFILE_SUFFIX=$OUTFILE_SUFFIX-hooked
         fi
     fi
-    if [[ "${OUTFILE_SUFFIX}" == "" ]] 
+    if [[ "${OUTFILE_SUFFIX}" == "" ]]
     then
         OUTFILE_SUFFIX=-repacked
     fi
-    if [[ "${ROOT}" == "YES" ]] 
+    if [[ "${ROOT}" == "YES" ]]
     then
         OUTFILE_SUFFIX=$OUTFILE_SUFFIX-rooted
     fi
-    if [[ "${ENABLE_GDB}" == "YES" ]] 
+    if [[ "${ENABLE_GDB}" == "YES" ]]
     then
         OUTFILE_SUFFIX=$OUTFILE_SUFFIX-gdbserver
     fi
@@ -318,7 +319,7 @@ unpack_bin()
     FOLDERFWFILE=$(dirname "$INFILE")
     BASEFWFILE_NOEXT=${BASEFWFILE%.*}
     GZIP_ORIGINAL=${FOLDERFWFILE}/${BASEFWFILE_NOEXT}-initrd-original.gz
-    CPIO_ORIGINAL=${FOLDERFWFILE}/${BASEFWFILE_NOEXT}-initrd-original.cpio 
+    CPIO_ORIGINAL=${FOLDERFWFILE}/${BASEFWFILE_NOEXT}-initrd-original.cpio
     # we should not really care about the name of the gzip. However, if we want to re-unpack
     # the file that we are repacking, we need that it uses the "rootfs.img" as this is what
     # we use to locate the rootfs.img inside the .bin in bin.py
@@ -496,7 +497,7 @@ fix_gns3_interface()
 #
 # Notes:
 #  Expects $PWD to be an extracted rootfs directory
-#  XXX - Makes undocumented assumptions about FIRMWAREDIR layout that will 
+#  XXX - Makes undocumented assumptions about FIRMWAREDIR layout that will
 #        sometimes break. We should include those gdb files in asafw repo and
 #        copy them from somewhere static
 #
@@ -580,7 +581,7 @@ replace_lina_monitor()
 ##
 inject_debugshell()
 {
-    # On ASAv 64-bit, patching in a debugshell to lina has the implicit requirement 
+    # On ASAv 64-bit, patching in a debugshell to lina has the implicit requirement
     # of patching lina_monitor to bypass boot verification of lina.
     if [[ "$DEBUGSHELL" == "YES" ]]
     then
@@ -619,6 +620,58 @@ inject_debugshell()
             log "ERROR: '${CMD}' failed"
             exit 1
         fi
+    fi
+}
+
+# setup_serialshell()
+#
+# Arguments:
+#  None
+#
+# Required Globals:
+#
+# Notes:
+#  Expects $PWD to be an extracted rootfs directory
+#
+# Description
+#  This setups a Linux shell on 2nd serial. E.g. add this to qemu options in GNS3: ASAv instance > Configure
+#  then Advanced settings > Additional settings: "-serial telnet:127.0.0.1:15002,server,nowait"
+#
+#  Tested with asav962-7.qcow2
+##
+setup_serialshell()
+{
+    if [[ "$SERIALSHELL" == "YES" ]]
+    then
+        log "Exposing a Linux shell on 2nd serial (GNS3 only?)"
+        sed -i '/# launch our user space processes/a \/bin\/bash < \/dev\/ttyS1 > \/dev\/ttyS1 2> \/dev\/ttyS1 &' asa/scripts/rcS
+
+        # Not working properly yet so needs to be executed manually
+        #log "Starting lina at boot"
+        #sed -i 's/    echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/    echo "\/asa\/scripts\/lina_start.sh"/' asa/scripts/rcS
+        log "Not starting lina at boot"
+        sed -i 's/    echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/    echo ""/' asa/scripts/rcS
+
+        log "Copying lina_start.sh script"
+        CMD="cp ${TOOLDIR}/binfs/lina_start.sh asa/scripts/lina_start.sh"
+        ${CMD}
+        if [ $? != 0 ];
+        then
+            log "ERROR: '${CMD}' failed"
+            exit 1
+        fi
+        CMD="chmod +x asa/scripts/lina_start.sh"
+        ${CMD}
+        if [ $? != 0 ];
+        then
+            log "ERROR: '${CMD}' failed"
+            exit 1
+        fi
+
+        # Avoids reaching the end of rcS script which triggers a reboot
+        #sed -i '/# Explicitly call reboot here for consistency across target rcS files/a echo "while true; do echo in while true loop; sleep 1; done" >> \/tmp\/run_cmd' asa/scripts/rcS
+        sed -i '/# Explicitly call reboot here for consistency across target rcS files/a echo "read -p \\"[asafw] Press enter to reboot\\"" >> \/tmp\/run_cmd' asa/scripts/rcS
+
     fi
 }
 
@@ -706,6 +759,7 @@ modify_bin()
     inject_gdb
     replace_lina_monitor
     inject_debugshell
+    setup_serialshell
     custom
 
     # Return to original folder
@@ -724,7 +778,7 @@ modify_bin()
 #   CPIO
 #
 # Notes:
-#  If $2 is specified, then $3 must also be specified. 
+#  If $2 is specified, then $3 must also be specified.
 #
 # TODO:
 #  - It would be nice if we just derive $3 from $1
@@ -757,7 +811,7 @@ repack_bin()
 #    cd ..
     #ls -l *.gz
 
-    if [[ "${ROOT}" == "YES" ]] 
+    if [[ "${ROOT}" == "YES" ]]
     then
         ROOTARGS=--root
     else
@@ -807,6 +861,7 @@ INJECT_GDB="NO"
 CUSTOM="NO"
 NO_CLEANUP="NO"
 DEBUGSHELL="NO"
+SERIALSHELL="NO"
 LINAHOOK=
 ROOT="NO"
 LINABINDIR=
@@ -860,6 +915,9 @@ do
             ;;
         -b|--debug-shell)
             DEBUGSHELL="YES"
+            ;;
+        -B|--serial-shell)
+            SERIALSHELL="YES"
             ;;
         -H|--lina-hook)
             LINAHOOK="$2"
@@ -1014,7 +1072,7 @@ then
         usage
     fi
     ROOTFS_DIR=${INPUTFW}/rootfs
-    if [ -d ${ROOTFS_DIR} ] 
+    if [ -d ${ROOTFS_DIR} ]
     then
         log "ERROR: No ${ROOTFS_DIR} directory found"
         log "ERROR: Bad firmware directory for --repack-only"
@@ -1023,7 +1081,7 @@ then
 
     ORIGDIR=${PWD}
     modify_bin ${ROOTFS_DIR}
-    repack_bin ${ROOTFS_DIR} ${OUTBIN} ${ORIGINAL_FIRMWARE} 
+    repack_bin ${ROOTFS_DIR} ${OUTBIN} ${ORIGINAL_FIRMWARE}
 
     # We expect modify_bin and repack_bin not screw with our path. This just
     # warns about possible bugs being introduced

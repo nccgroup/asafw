@@ -965,3 +965,28 @@ to deduce branch EOL status. Last update of this table is July 2017.
  9.7               |               | No           |                                     |
  9.8               |               | No           |                                     |
  9.9               |               | No           |                                     |
+
+# Known issues
+
+## sudo -E not keeping the PATH
+
+On Ubuntu 18.04 at least, they have a defined `secure_path` in `/etc/sudoers` which forbids using the `sudo -E` command:
+
+```
+$ unpack_repack_qcow2.sh
+[unpack_repack_qcow2] You need to be root to mount/unmount the qcow2
+$ sudo -E unpack_repack_qcow2.sh
+[sudo] password for user:
+sudo: unpack_repack_qcow2.sh: command not found
+```
+
+So you may need to comment that out, see [here](https://stackoverflow.com/questions/18748045/sudo-e-option-does-not-work).
+
+```
+#Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+```
+
+$ sudo -E unpack_repack_qcow2.sh 
+[sudo] password for user: 
+[unpack_repack_qcow2] ERROR: You must specify at least a valid -i file: 
+[unpack_repack_qcow2] ERROR: Double check your working directory as  doesn't appear to exist
