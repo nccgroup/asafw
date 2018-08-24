@@ -1,7 +1,7 @@
 #!/bin/bash
-# 
+#
 # Restart lina userland process without reboot the whole Linux OS
-# 
+#
 # Note:
 # You can use "crashinfo force page-fault" to force a crash from Cisco CLI for testing purpose
 #

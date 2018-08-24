@@ -643,8 +643,13 @@ setup_serialshell()
 {
     if [[ "$SERIALSHELL" == "YES" ]]
     then
+
+        sed -i '/# regular startup/i # serial shell specifics' asa/scripts/rcS
+
+        # we redirect stdin/out/err to the 2nd serial
+        # .bashrc does not seem to be loaded automatically so we force it to load with --rcfile
         log "Exposing a Linux shell on 2nd serial (GNS3 only?)"
-        sed -i '/# launch our user space processes/a \/bin\/bash < \/dev\/ttyS1 > \/dev\/ttyS1 2> \/dev\/ttyS1 &' asa/scripts/rcS
+        sed -i '/# regular startup/i \/bin\/bash --rcfile \/root\/.bashrc < \/dev\/ttyS1 > \/dev\/ttyS1 2> \/dev\/ttyS1 &' asa/scripts/rcS
 
         # Not working properly yet so needs to be executed manually
         #log "Starting lina at boot"
@@ -652,15 +657,36 @@ setup_serialshell()
         log "Not starting lina at boot"
         sed -i 's/    echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/    echo ""/' asa/scripts/rcS
 
-        log "Copying lina_start.sh script"
-        CMD="cp ${TOOLDIR}/binfs/lina_start.sh asa/scripts/lina_start.sh"
+        declare -a scripts_list=("lina_start.sh" "lina_debug.sh" "lin_a_kill.sh")
+        for file in "${scripts_list[@]}"
+        do
+            log "Copying ${file} script"
+            CMD="cp ${TOOLDIR}/binfs/${file} asa/scripts/${file}"
+            ${CMD}
+            if [ $? != 0 ];
+            then
+                log "ERROR: '${CMD}' failed"
+                exit 1
+            fi
+            CMD="chmod +x asa/scripts/${file}"
+            ${CMD}
+            if [ $? != 0 ];
+            then
+                log "ERROR: '${CMD}' failed"
+                exit 1
+            fi
+        done
+
+        file=".bashrc"
+        log "Copying ${file} script"
+        CMD="cp ${TOOLDIR}/binfs/${file} root/${file}"
         ${CMD}
         if [ $? != 0 ];
         then
             log "ERROR: '${CMD}' failed"
             exit 1
         fi
-        CMD="chmod +x asa/scripts/lina_start.sh"
+        CMD="chmod +x root/${file}"
         ${CMD}
         if [ $? != 0 ];
         then
