@@ -50,11 +50,12 @@ usage()
     echo "      -H, --lina-hook <hooks to install>  Inject lina hooks (requires -b)"
     echo "      -c, --custom                        Custom functionality you can add yourself"
     echo "      -u, --unpack-only                   Unpack the asa*.bin firmware inside the QCOW2 and nothing else"
-    echo "      --grub-timeout                      XXXX"
+    echo "      --grub-timeout <timeout>            Change grub timeout to speed up boot process"
     echo "      --inject-grub-conf <grub.conf>      XXXX"
     echo "      --inject-bin <multi-bin qcow2>      XXXX"
-    echo "      --mount-qcow2                       XXXX"
-    echo "      --unmount-qcow2                     XXXX"
+    echo "      --mount-qcow2                       Mount qcow2 (debug)"
+    echo "      --unmount-qcow2                     Unmount qcow2 (debug)"
+    echo "      --partition <num>                   Partition to mount (debug)"
     echo "      -M, --multi-bin                     Indicates if the input qcow2 file is a multi-bin, so we inject the modified asa*.bin in the right partition"
     echo "      -v, --verbose                       Display debug messages"
     echo "Examples:"
@@ -167,7 +168,7 @@ extract_bin()
         log "GRUB TIMEOUT set to ${GRUB_TIMEOUT}"
         # XXX - running the cmd via the variable fails
         SEDCMD="sed -i 's/timeout \(.*\)/timeout ${GRUB_TIMEOUT}/' ${QCOW2MNT}/boot/grub.conf"
-        sed -i 's/timeout \(.*\)/timeout ${GRUB_TIMEOUT}/' ${QCOW2MNT}/boot/grub.conf
+        sed -i "s/timeout \(.*\)/timeout ${GRUB_TIMEOUT}/" ${QCOW2MNT}/boot/grub.conf
         if [ $? != 0 ];
         then
             log "${SEDCMD} failed"
