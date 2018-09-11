@@ -16,6 +16,7 @@ import os
 import sys
 import pprint
 import re
+from datetime import datetime
 
 from helper import *
 
@@ -29,13 +30,13 @@ def logmsg(s, end=None):
         print(s)
 
 def mitigations_table_header():
-    print("| ID  | Version   |Arch|ASLR| NX |PIE|Can|RELRO|Sym|Strip|    Linux | Glibc | Heap allocator | Firmware                  |")
-    print("|-----|-----------|----|----|----|---|---|-----|---|-----|----------|-------|----------------|---------------------------")
+    print("| ID  | Version   |Arch|ASLR| NX |PIE|Can|RELRO|Sym|Strip|    Linux | Glibc | Heap allocator | Build date | Firmware                  |")
+    print("|-----|-----------|----|----|----|---|---|-----|---|-----|----------|-------|----------------|------------|---------------------------")
 
 def migitations_table_footer():
-    print("| ID  | Version   |Arch|ASLR| NX |PIE|Can|RELRO|Sym|Strip|    Linux | Glibc | Heap allocator | Firmware                  |")
-    print("| Can = Canary              |||||||||||||                                                                                |")
-    print("| Sym = Exported symbols    |||||||||||||                                                                                |")
+    print("| ID  | Version   |Arch|ASLR| NX |PIE|Can|RELRO|Sym|Strip|    Linux | Glibc | Heap allocator | Build date | Firmware                  |")
+    print("| Can = Canary              ||||||||||||||                                                                                            |")
+    print("| Sym = Exported symbols    ||||||||||||||                                                                                            |")
 
 # print info/mitigations for ASA firewalls in a markdown-formated table
 def print_mitigations(results):
@@ -98,6 +99,10 @@ def print_mitigations(results):
             heap_alloc = t["heap_alloc"]
         except KeyError:
             heap_alloc = "?"
+        try:
+            build_date = t["build_date"]
+        except KeyError:
+            build_date = "?"
         line += " % 2s" % arch + ' |'
         line += " % 2s" % aslr + ' |'
         line += " % 2s" % nx + ' |'
@@ -109,6 +114,7 @@ def print_mitigations(results):
         line += " % 8s" % uname + ' |'
         line += " % 5s" % glibc_version + ' |'
         line += " % 14s" % heap_alloc + ' |'
+        line += " % 10s" % build_date + ' |'
         line += "% 26s" % t['fw'] + ' |'
         print(line)
         idx += 1
@@ -133,7 +139,7 @@ def list_mitigations(dbname, bin_name, verbose=True):
         print_mitigations(results)
 
 # Parse some info passed from info.sh so we can save them in a database
-def parse_info2(new_r, info):
+def parse_info2(new_r, info, build_date=None):
     if "32-bit" in info:
         new_r["arch"] = 32
     elif "64-bit" in info:
@@ -221,11 +227,39 @@ def parse_info2(new_r, info):
                 new_r["lina_imagebase"] = 0x555555554000
             else:
                 new_r["lina_imagebase"] = 0x400000
+    
+    # %Z only matchesA "UTC", "EST" and "CST" so we try them all
+    fmt_list = [
+        "%a %b %d %H:%M:%S PST %Y",
+        "%a %b %d %H:%M:%S PDT %Y",
+        "%a %b %d %H:%M:%S MST %Y",
+        "%a %b %d %H:%M:%S MDT %Y",
+    ]
+    # Parses something like that:
+    # "PIX (9.2.4) #0: Tue Jul 14 22:19:35 PDT 2015"
+    if build_date and "PIX (" in build_date:
+        off = build_date.find(":")
+        if off == -1:
+            logmsg("ERROR: could not find ':' in build_date: %s" % build_date) 
+        else:
+            d = build_date[off+1:].strip()
+            dt = None
+            for fmt in fmt_list:
+                try:
+                    dt = datetime.strptime(d, fmt)
+                    break
+                except ValueError as e:
+                    continue
+            if not dt:
+                logmsg("ERROR: could not find valid format in build_date: %s" % d) 
+            else:
+                new_r["build_date"] = dt.strftime("%d-%m-%Y")
+
 
     return new_r
 
 # Add some info we got for an asa*.bin into a database
-def update_db(dbname, bin_name, info):
+def update_db(dbname, bin_name, info, build_date=None):
     results = []
     if os.path.isfile(dbname):
         with open(dbname, "rb") as tmp:
@@ -235,7 +269,7 @@ def update_db(dbname, bin_name, info):
     new_r["fw"] = bin_name
     new_r["version"] = version
     if "RELRO" in info:
-        new_r = parse_info2(new_r, info)
+        new_r = parse_info2(new_r, info, build_date=build_date)
     elif "Linux version" in info:
         new_r["uname"] = info
     isNew = True
@@ -259,6 +293,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', dest='list_mitigations', action='store_true', help='List migitations in all firmware versions')
     parser.add_argument('-u', dest='update_info', default=None, help="Output from info.sh to update db")
+    parser.add_argument('-b', dest='build_date', default=None, help="Output from info.sh for the lina build date")
     parser.add_argument('-i', dest='bin_name', help='firmware bin name to update or display')
     parser.add_argument('-v', dest='verbose', help='display more info')
     parser.add_argument('-d', dest='dbname', default=None, help='json database name to read/list info from')
@@ -273,5 +308,5 @@ if __name__ == "__main__":
         sys.exit()
 
     if args.update_info:
-        update_db(args.dbname, args.bin_name, args.update_info)
+        update_db(args.dbname, args.bin_name, args.update_info, args.build_date)
         sys.exit()
