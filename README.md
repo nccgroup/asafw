@@ -1032,7 +1032,9 @@ So you may need to comment that out, see [here](https://stackoverflow.com/questi
 #Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 ```
 
+```
 $ sudo -E unpack_repack_qcow2.sh 
 [sudo] password for user: 
 [unpack_repack_qcow2] ERROR: You must specify at least a valid -i file: 
 [unpack_repack_qcow2] ERROR: Double check your working directory as  doesn't appear to exist
+```
