@@ -24,7 +24,7 @@ keep the right permissions.
 ## Requirements
 
 * Python3 only
-	* apt install binwalk
+* apt install binwalk qemu-utils
 * Heavily tested on Linux (but could work on OS X to)
 
 You initially need to modify `asafw/env.sh` to match your environment. It will
