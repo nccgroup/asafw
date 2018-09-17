@@ -150,11 +150,13 @@ for DIR in $(find . -type d -name "rootfs"); do
     fi
     fi
 
+    BUILD_DATE=$(strings -w "${DIR}/asa/bin/lina" | grep "PIX (")
+
     if [[ "$SAVE_RESULTS" == "YES" ]]
     then
-        info.py -i "${BIN}" -u "\"${RESULT} ${STRIPPED} ${ASLR} ${SYMBOLS} ${LIBC} ${ARCH} ${HEAP_LINA}\"" -d "${DBNAME}"
+        info.py -i "${BIN}" -u "\"${RESULT} ${STRIPPED} ${ASLR} ${SYMBOLS} ${LIBC} ${ARCH} ${HEAP_LINA}\"" -b "${BUILD_DATE}" -d "${DBNAME}"
     else
-        echo -e "${BIN}: ${RESULT} ${STRIPPED} ${ASLR} ${SYMBOLS} ${SYMBOLSCNT} ${LIBC} ${ARCH} ${HEAP_LINA}"
+        echo -e "${BIN}: ${RESULT} ${STRIPPED} ${ASLR} ${SYMBOLS} ${SYMBOLSCNT} ${LIBC} ${ARCH} ${HEAP_LINA} ${BUILD_DATE}"
     fi
 
 done

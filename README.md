@@ -732,203 +732,249 @@ a specific version in case it is required (e.g. for `lina.py`).
 
 # Mitigation summary
 
-Below is a copy of the output of `info.py -l asadbg.json`, formatted correctly 
+Below is a copy of the output of `info.py -l -d asadbg.json`, formatted correctly 
 for markdown:
 
-| ID  | Version   |Arch|ASLR| NX |PIE|Can|RELRO|Sym|Strip|    Linux | Glibc | Heap allocator | Firmware                  |
-|-----|-----------|----|----|----|---|---|-----|---|-----|----------|-------|----------------|---------------------------
-| 000 |     8.0.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x |             asa802-k8.bin |
-| 001 |     8.0.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x |             asa803-k8.bin |
-| 002 |     8.0.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x |             asa804-k8.bin |
-| 003 |  8.0.4.16 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x |          asa804-16-k8.bin |
-| 004 |     8.0.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x |             asa805-k8.bin |
-| 005 |  8.0.5.23 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x |          asa805-23-k8.bin |
-| 006 |  8.0.5.28 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x |          asa805-28-k8.bin |
-| 007 |  8.0.5.31 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x |          asa805-31-k8.bin |
-| 008 |     8.1.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |         asa811-smp-k8.bin |
-| 009 |     8.1.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |         asa812-smp-k8.bin |
-| 010 |  8.1.2.23 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |      asa812-23-smp-k8.bin |
-| 011 |  8.1.2.49 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |      asa812-49-smp-k8.bin |
-| 012 |  8.1.2.50 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |      asa812-50-smp-k8.bin |
-| 013 |  8.1.2.55 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |      asa812-55-smp-k8.bin |
-| 014 |  8.1.2.56 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |      asa812-56-smp-k8.bin |
-| 015 |     8.2.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |             asa821-k8.bin |
-| 016 |     8.2.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |             asa822-k8.bin |
-| 017 |     8.2.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 |         asa822-smp-k8.bin |
-| 018 |     8.2.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |             asa823-k8.bin |
-| 019 |     8.2.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |         asa823-smp-k8.bin |
-| 020 |     8.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |             asa824-k8.bin |
-| 021 |     8.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |         asa824-smp-k8.bin |
-| 022 |   8.2.4.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |           asa824-4-k8.bin |
-| 023 |     8.2.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |             asa825-k8.bin |
-| 024 |     8.2.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |         asa825-smp-k8.bin |
-| 025 |  8.2.5.13 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-13-k8.bin |
-| 026 |  8.2.5.22 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-22-k8.bin |
-| 027 |  8.2.5.26 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-26-k8.bin |
-| 028 |  8.2.5.33 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-33-k8.bin |
-| 029 |  8.2.5.41 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-41-k8.bin |
-| 030 |  8.2.5.46 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-46-k8.bin |
-| 031 |  8.2.5.51 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-51-k8.bin |
-| 032 |  8.2.5.52 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-52-k8.bin |
-| 033 |  8.2.5.57 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-57-k8.bin |
-| 034 |  8.2.5.59 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa825-59-k8.bin |
-| 035 |     8.3.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |             asa831-k8.bin |
-| 036 |     8.3.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |         asa831-smp-k8.bin |
-| 037 |     8.3.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |             asa832-k8.bin |
-| 038 |     8.3.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |         asa832-smp-k8.bin |
-| 039 |  8.3.2.13 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa832-13-k8.bin |
-| 040 |  8.3.2.25 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa832-25-k8.bin |
-| 041 |  8.3.2.39 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa832-39-k8.bin |
-| 042 |   8.3.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |           asa832-4-k8.bin |
-| 043 |  8.3.2.40 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa832-40-k8.bin |
-| 044 |  8.3.2.44 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |          asa832-44-k8.bin |
-| 045 |  8.3.2.44 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 |      asa832-44-smp-k8.bin |
-| 046 |     8.4.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa841-k8.bin |
-| 047 |     8.4.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa841-smp-k8.bin |
-| 048 |  8.4.1.11 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa841-11-k8.bin |
-| 049 |     8.4.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa842-k8.bin |
-| 050 |     8.4.2 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa842-smp-k8.bin |
-| 051 |   8.4.2.8 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa842-8-k8.bin |
-| 052 |     8.4.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa843-k8.bin |
-| 053 |     8.4.3 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa843-smp-k8.bin |
-| 054 |   8.4.3.8 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa843-8-k8.bin |
-| 055 |     8.4.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa844-k8.bin |
-| 056 |   8.4.4.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa844-1-k8.bin |
-| 057 |   8.4.4.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |       asa844-1-smp-k8.bin |
-| 058 |   8.4.4.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa844-3-k8.bin |
-| 059 |   8.4.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa844-5-k8.bin |
-| 060 |   8.4.4.9 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa844-9-k8.bin |
-| 061 |     8.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa845-k8.bin |
-| 062 |     8.4.5 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa845-smp-k8.bin |
-| 063 |     8.4.6 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa846-k8.bin |
-| 064 |     8.4.6 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa846-smp-k8.bin |
-| 065 |   8.4.6.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa846-5-k8.bin |
-| 066 |     8.4.7 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa847-k8.bin |
-| 067 |     8.4.7 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa847-smp-k8.bin |
-| 068 |  8.4.7.15 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa847-15-k8.bin |
-| 069 |  8.4.7.26 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa847-26-k8.bin |
-| 070 |  8.4.7.28 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa847-28-k8.bin |
-| 071 |  8.4.7.29 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa847-29-k8.bin |
-| 072 |  8.4.7.30 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa847-30-k8.bin |
-| 073 |  8.4.7.31 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa847-31-k8.bin |
-| 074 |     8.6.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa861-smp-k8.bin |
-| 075 |     9.0.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa901-k8.bin |
-| 076 |     9.0.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa902-k8.bin |
-| 077 |     9.0.2 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa902-smp-k8.bin |
-| 078 |     9.0.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa903-k8.bin |
-| 079 |     9.0.3 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa903-smp-k8.bin |
-| 080 |     9.0.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa904-k8.bin |
-| 081 |     9.0.4 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa904-smp-k8.bin |
-| 082 |  9.0.4.38 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa904-38-k8.bin |
-| 083 |  9.0.4.39 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa904-39-k8.bin |
-| 084 |  9.0.4.40 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa904-40-k8.bin |
-| 085 |  9.0.4.42 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa904-42-k8.bin |
-| 086 |   9.0.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa904-5-k8.bin |
-| 087 |     9.1.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa911-k8.bin |
-| 088 |     9.1.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa911-smp-k8.bin |
-| 089 |   9.1.1.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa911-4-k8.bin |
-| 090 |     9.1.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa912-k8.bin |
-| 091 |     9.1.2 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa912-smp-k8.bin |
-| 092 |     9.1.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa913-k8.bin |
-| 093 |     9.1.3 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa913-smp-k8.bin |
-| 094 |     9.1.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa914-k8.bin |
-| 095 |     9.1.4 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa914-smp-k8.bin |
-| 096 |   9.1.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa914-5-k8.bin |
-| 097 |     9.1.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa915-k8.bin |
-| 098 |     9.1.5 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa915-smp-k8.bin |
-| 099 |  9.1.5.12 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa915-12-k8.bin |
-| 100 |  9.1.5.16 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa915-16-k8.bin |
-| 101 |  9.1.5.19 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa915-19-k8.bin |
-| 102 |  9.1.5.21 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa915-21-k8.bin |
-| 103 |     9.1.6 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa916-k8.bin |
-| 104 |     9.1.6 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa916-smp-k8.bin |
-| 105 |  9.1.6.10 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa916-10-k8.bin |
-| 106 |  9.1.6.11 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa916-11-k8.bin |
-| 107 |   9.1.6.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa916-4-k8.bin |
-| 108 |     9.1.7 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa917-k8.bin |
-| 109 |  9.1.7.12 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa917-12-k8.bin |
-| 110 |  9.1.7.13 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa917-13-k8.bin |
-| 111 |  9.1.7.19 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |      asa917-19-smp-k8.bin |
-| 112 |  9.1.7.20 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |      asa917-20-smp-k8.bin |
-| 113 |  9.1.7.20 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa917-20-k8.bin |
-| 114 |  9.1.7.21 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa917-21-k8.bin |
-| 115 |  9.1.7.21 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |      asa917-21-smp-k8.bin |
-| 116 |   9.1.7.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa917-4-k8.bin |
-| 117 |   9.1.7.6 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa917-6-k8.bin |
-| 118 |   9.1.7.9 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa917-9-k8.bin |
-| 119 |     9.2.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa921-k8.bin |
-| 120 |     9.2.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa921-smp-k8.bin |
-| 121 |     9.2.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa922-k8.bin |
-| 122 |   9.2.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa922-4-k8.bin |
-| 123 |   9.2.2.4 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |       asa922-4-smp-k8.bin |
-| 124 |     9.2.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa923-k8.bin |
-| 125 |     9.2.3 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa923-smp-k8.bin |
-| 126 |     9.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |             asa924-k8.bin |
-| 127 |     9.2.4 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa924-smp-k8.bin |
-| 128 |  9.2.4.10 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa924-10-k8.bin |
-| 129 |  9.2.4.13 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |      asa924-13-smp-k8.bin |
-| 130 |  9.2.4.14 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa924-14-k8.bin |
-| 131 |  9.2.4.18 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa924-18-k8.bin |
-| 132 |  9.2.4.24 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa924-24-k8.bin |
-| 133 |  9.2.4.24 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |      asa924-24-smp-k8.bin |
-| 134 |  9.2.4.25 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |      asa924-25-smp-k8.bin |
-| 135 |  9.2.4.25 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |          asa924-25-k8.bin |
-| 136 |   9.2.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa924-5-k8.bin |
-| 137 |   9.2.4.5 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |       asa924-5-smp-k8.bin |
-| 138 |   9.2.4.8 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |           asa924-8-k8.bin |
-| 139 |   9.2.4.8 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |       asa924-8-smp-k8.bin |
-| 140 |     9.3.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 |         asa931-smp-k8.bin |
-| 141 |     9.3.2 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |         asa932-smp-k8.bin |
-| 142 | 9.3.2.200 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |     asa932-200-smp-k8.bin |
-| 143 | 9.3.2.200 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |         asav932-200.qcow2 |
-| 144 |     9.3.3 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |         asa933-smp-k8.bin |
-| 145 |  9.3.3.10 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |          asav933-10.qcow2 |
-| 146 |  9.3.3.11 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |      asa933-11-smp-k8.bin |
-| 147 |  9.3.3.11 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |          asav933-11.qcow2 |
-| 148 |   9.3.3.7 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |       asa933-7-smp-k8.bin |
-| 149 |   9.3.3.9 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |       asa933-9-smp-k8.bin |
-| 150 |   9.3.3.9 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |           asav933-9.qcow2 |
-| 151 |     9.4.1 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |         asa941-smp-k8.bin |
-| 152 |     9.4.1 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |             asav941.qcow2 |
-| 153 |  9.4.1.13 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |      asa941-13-smp-k8.bin |
-| 154 |  9.4.1.13 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |          asav941-13.qcow2 |
-| 155 | 9.4.1.200 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |         asav941-200.qcow2 |
-| 156 |   9.4.1.6 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |           asav941-6.qcow2 |
-| 157 |     9.4.2 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |         asa942-smp-k8.bin |
-| 158 |     9.4.2 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |             asav942.qcow2 |
-| 159 |  9.4.2.11 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |      asa942-11-smp-k8.bin |
-| 160 |   9.4.2.6 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |       asa942-6-smp-k8.bin |
-| 161 |   9.4.2.6 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |           asav942-6.qcow2 |
-| 162 |     9.4.3 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |         asa943-smp-k8.bin |
-| 163 |  9.4.3.12 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |      asa943-12-smp-k8.bin |
-| 164 |     9.4.4 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |         asa944-smp-k8.bin |
-| 165 |  9.4.4.13 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |      asa944-13-smp-k8.bin |
-| 166 |  9.4.4.14 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x |      asa944-14-smp-k8.bin |
-| 167 |     9.5.1 | 64 |  Y |  N | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |         asa951-smp-k8.bin |
-| 168 |     9.5.2 | 64 |  Y |  N | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |         asa952-smp-k8.bin |
-| 169 | 9.5.2.204 | 64 |  Y |  N | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |         asav952-204.qcow2 |
-| 170 |     9.5.3 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |         asa953-smp-k8.bin |
-| 171 |     9.6.1 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |         asa961-smp-k8.bin |
-| 172 |     9.6.1 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |             asav961.qcow2 |
-| 173 |  9.6.1.10 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |      asa961-10-smp-k8.bin |
-| 174 |     9.6.2 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |         asa962-smp-k8.bin |
-| 175 |     9.6.2 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |             asav962.qcow2 |
-| 176 |   9.6.2.2 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |           asav962-2.qcow2 |
-| 177 |   9.6.2.3 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |       asa962-3-smp-k8.bin |
-| 178 |   9.6.2.7 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |           asav962-7.qcow2 |
-| 179 |  9.6.3.17 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |      asa963-17-smp-k8.bin |
-| 180 |  9.6.3.20 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |      asa963-20-smp-k8.bin |
-| 181 |     9.6.4 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |         asa964-smp-k8.bin |
-| 182 |     9.7.1 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |         asa971-smp-k8.bin |
-| 183 |     9.7.1 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |             asav971.qcow2 |
-| 184 |  9.7.1.15 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |      asa971-15-smp-k8.bin |
-| 185 |  9.7.1.16 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |      asa971-16-smp-k8.bin |
-| 186 |   9.8.1.5 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |           asav981-5.qcow2 |
-| 187 |  9.8.2.14 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |      asa982-14-smp-k8.bin |
-| 188 |  9.8.2.15 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |      asa982-15-smp-k8.bin |
-| 189 |   9.8.2.8 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |       asa982-8-smp-k8.bin |
-| 190 |     9.9.1 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x |         asa991-smp-k8.bin |
-| ID  | Version   |Arch|ASLR| NX |PIE|Can|RELRO|Sym|Strip|    Linux | Glibc | Heap allocator | Firmware                  |
+| ID  | Version   |Arch|ASLR| NX |PIE|Can|RELRO|Sym|Strip|    Linux | Glibc | Heap allocator | Build date | Firmware                  |
+|-----|-----------|----|----|----|---|---|-----|---|-----|----------|-------|----------------|------------|---------------------------
+| 000 |     8.0.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x | 15-06-2007 |             asa802-k8.bin |
+| 001 |     8.0.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x | 06-11-2007 |             asa803-k8.bin |
+| 002 |     8.0.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x | 07-08-2008 |             asa804-k8.bin |
+| 003 |  8.0.4.16 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x | 04-12-2008 |          asa804-16-k8.bin |
+| 004 |     8.0.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x | 02-11-2009 |             asa805-k8.bin |
+| 005 |  8.0.5.23 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x | 20-01-2011 |          asa805-23-k8.bin |
+| 006 |  8.0.5.28 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x | 26-09-2012 |          asa805-28-k8.bin |
+| 007 |  8.0.5.31 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.6.x | 13-03-2013 |          asa805-31-k8.bin |
+| 008 |     8.1.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 01-03-2008 |         asa811-smp-k8.bin |
+| 009 |     8.1.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 09-10-2008 |         asa812-smp-k8.bin |
+| 010 |  8.1.2.23 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 22-04-2009 |      asa812-23-smp-k8.bin |
+| 011 |  8.1.2.49 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 22-02-2011 |      asa812-49-smp-k8.bin |
+| 012 |  8.1.2.50 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 22-09-2011 |      asa812-50-smp-k8.bin |
+| 013 |  8.1.2.55 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 29-02-2012 |      asa812-55-smp-k8.bin |
+| 014 |  8.1.2.56 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 26-09-2012 |      asa812-56-smp-k8.bin |
+| 015 |     8.2.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 05-05-2009 |             asa821-k8.bin |
+| 016 |     8.2.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 11-01-2010 |             asa822-k8.bin |
+| 017 |     8.2.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.17.8 | 2.3.2 | dlmalloc 2.8.3 | 11-01-2010 |         asa822-smp-k8.bin |
+| 018 |     8.2.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 06-08-2010 |             asa823-k8.bin |
+| 019 |     8.2.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 06-08-2010 |         asa823-smp-k8.bin |
+| 020 |     8.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 14-12-2010 |             asa824-k8.bin |
+| 021 |     8.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 14-12-2010 |         asa824-smp-k8.bin |
+| 022 |   8.2.4.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 03-03-2011 |           asa824-4-k8.bin |
+| 023 |     8.2.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 20-05-2011 |             asa825-k8.bin |
+| 024 |     8.2.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 20-05-2011 |         asa825-smp-k8.bin |
+| 025 |  8.2.5.13 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 05-09-2011 |          asa825-13-k8.bin |
+| 026 |  8.2.5.22 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 20-01-2012 |          asa825-22-k8.bin |
+| 027 |  8.2.5.26 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 02-03-2012 |          asa825-26-k8.bin |
+| 028 |  8.2.5.33 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 21-08-2012 |          asa825-33-k8.bin |
+| 029 |  8.2.5.41 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 13-03-2013 |          asa825-41-k8.bin |
+| 030 |  8.2.5.46 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 23-08-2013 |          asa825-46-k8.bin |
+| 031 |  8.2.5.51 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 20-08-2014 |          asa825-51-k8.bin |
+| 032 |  8.2.5.52 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 13-10-2014 |          asa825-52-k8.bin |
+| 033 |  8.2.5.57 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 24-03-2015 |          asa825-57-k8.bin |
+| 034 |  8.2.5.59 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 12-02-2016 |          asa825-59-k8.bin |
+| 035 |     8.3.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 04-03-2010 |             asa831-k8.bin |
+| 036 |     8.3.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 04-03-2010 |         asa831-smp-k8.bin |
+| 037 |     8.3.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 30-07-2010 |             asa832-k8.bin |
+| 038 |     8.3.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 30-07-2010 |         asa832-smp-k8.bin |
+| 039 |  8.3.2.13 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 19-01-2011 |          asa832-13-k8.bin |
+| 040 |  8.3.2.25 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 26-08-2011 |          asa832-25-k8.bin |
+| 041 |  8.3.2.39 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 30-09-2013 |          asa832-39-k8.bin |
+| 042 |   8.3.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 20-09-2010 |           asa832-4-k8.bin |
+| 043 |  8.3.2.40 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 11-02-2014 |          asa832-40-k8.bin |
+| 044 |  8.3.2.44 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 24-03-2015 |          asa832-44-k8.bin |
+| 045 |  8.3.2.44 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 | 2.3.2 | dlmalloc 2.8.3 | 24-03-2015 |      asa832-44-smp-k8.bin |
+| 046 |     8.4.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 31-01-2011 |             asa841-k8.bin |
+| 047 |     8.4.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 31-01-2011 |         asa841-smp-k8.bin |
+| 048 |  8.4.1.11 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 06-05-2011 |          asa841-11-k8.bin |
+| 049 |     8.4.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 15-06-2011 |             asa842-k8.bin |
+| 050 |     8.4.2 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 15-06-2011 |         asa842-smp-k8.bin |
+| 051 |   8.4.2.8 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 26-08-2011 |           asa842-8-k8.bin |
+| 052 |     8.4.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 06-01-2012 |             asa843-k8.bin |
+| 053 |     8.4.3 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 06-01-2012 |         asa843-smp-k8.bin |
+| 054 |   8.4.3.8 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 01-03-2012 |           asa843-8-k8.bin |
+| 055 |     8.4.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 21-05-2012 |             asa844-k8.bin |
+| 056 |   8.4.4.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 14-06-2012 |           asa844-1-k8.bin |
+| 057 |   8.4.4.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 14-06-2012 |       asa844-1-smp-k8.bin |
+| 058 |   8.4.4.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 11-07-2012 |           asa844-3-k8.bin |
+| 059 |   8.4.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 08-08-2012 |           asa844-5-k8.bin |
+| 060 |   8.4.4.9 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 21-09-2012 |           asa844-9-k8.bin |
+| 061 |     8.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 29-10-2012 |             asa845-k8.bin |
+| 062 |     8.4.5 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 29-10-2012 |         asa845-smp-k8.bin |
+| 063 |     8.4.6 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 26-04-2013 |             asa846-k8.bin |
+| 064 |     8.4.6 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 26-04-2013 |         asa846-smp-k8.bin |
+| 065 |   8.4.6.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 03-07-2013 |           asa846-5-k8.bin |
+| 066 |     8.4.7 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 30-08-2013 |             asa847-k8.bin |
+| 067 |     8.4.7 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 30-08-2013 |         asa847-smp-k8.bin |
+| 068 |  8.4.7.15 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 25-03-2014 |          asa847-15-k8.bin |
+| 069 |  8.4.7.26 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 14-01-2015 |          asa847-26-k8.bin |
+| 070 |  8.4.7.28 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 24-03-2015 |          asa847-28-k8.bin |
+| 071 |  8.4.7.29 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 09-09-2015 |          asa847-29-k8.bin |
+| 072 |  8.4.7.30 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 21-12-2015 |          asa847-30-k8.bin |
+| 073 |  8.4.7.31 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 03-02-2016 |          asa847-31-k8.bin |
+| 074 |     8.6.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 18-11-2011 |         asa861-smp-k8.bin |
+| 075 |   8.6.1.2 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 01-06-2012 |       asa861-2-smp-k8.bin |
+| 076 |   8.7.1.3 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 14-11-2012 |       asa871-3-smp-k8.bin |
+| 077 |   8.7.1.4 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 06-02-2013 |       asa871-4-smp-k8.bin |
+| 078 |     9.0.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 26-10-2012 |             asa901-k8.bin |
+| 079 |     9.0.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 21-02-2013 |             asa902-k8.bin |
+| 080 |     9.0.2 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 21-02-2013 |         asa902-smp-k8.bin |
+| 081 |     9.0.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 19-07-2013 |             asa903-k8.bin |
+| 082 |     9.0.3 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 19-07-2013 |         asa903-smp-k8.bin |
+| 083 |     9.0.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 04-12-2013 |             asa904-k8.bin |
+| 084 |     9.0.4 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 04-12-2013 |         asa904-smp-k8.bin |
+| 085 |  9.0.4.38 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 21-12-2015 |          asa904-38-k8.bin |
+| 086 |  9.0.4.39 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 08-02-2016 |          asa904-39-k8.bin |
+| 087 |  9.0.4.40 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 18-08-2016 |          asa904-40-k8.bin |
+| 088 |  9.0.4.42 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 09-09-2016 |          asa904-42-k8.bin |
+| 089 |  9.0.4.42 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 09-09-2016 |      asa904-42-smp-k8.bin |
+| 090 |   9.0.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 19-03-2014 |           asa904-5-k8.bin |
+| 091 |     9.1.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 28-11-2012 |             asa911-k8.bin |
+| 092 |     9.1.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 28-11-2012 |         asa911-smp-k8.bin |
+| 093 |   9.1.1.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 13-03-2013 |           asa911-4-k8.bin |
+| 094 |   9.1.1.4 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 13-03-2013 |       asa911-4-smp-k8.bin |
+| 095 |     9.1.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 09-05-2013 |             asa912-k8.bin |
+| 096 |     9.1.2 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 09-05-2013 |         asa912-smp-k8.bin |
+| 097 |     9.1.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 16-09-2013 |             asa913-k8.bin |
+| 098 |     9.1.3 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 16-09-2013 |         asa913-smp-k8.bin |
+| 099 |     9.1.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 05-12-2013 |             asa914-k8.bin |
+| 100 |     9.1.4 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 05-12-2013 |         asa914-smp-k8.bin |
+| 101 |   9.1.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 21-02-2014 |           asa914-5-k8.bin |
+| 102 |     9.1.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 27-03-2014 |             asa915-k8.bin |
+| 103 |     9.1.5 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 27-03-2014 |         asa915-smp-k8.bin |
+| 104 |  9.1.5.12 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 20-08-2014 |          asa915-12-k8.bin |
+| 105 |  9.1.5.16 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 06-10-2014 |          asa915-16-k8.bin |
+| 106 |  9.1.5.19 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 23-10-2014 |          asa915-19-k8.bin |
+| 107 |  9.1.5.21 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 12-12-2014 |          asa915-21-k8.bin |
+| 108 |     9.1.6 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 27-02-2015 |             asa916-k8.bin |
+| 109 |     9.1.6 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 27-02-2015 |         asa916-smp-k8.bin |
+| 110 |  9.1.6.10 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 11-09-2015 |          asa916-10-k8.bin |
+| 111 |  9.1.6.11 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 15-02-2016 |          asa916-11-k8.bin |
+| 112 |   9.1.6.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 07-05-2015 |           asa916-4-k8.bin |
+| 113 |   9.1.6.6 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 03-06-2015 |       asa916-6-smp-k8.bin |
+| 114 |   9.1.6.6 | 32 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 03-06-2015 |           asa916-6-k8.bin |
+| 115 |     9.1.7 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 14-01-2016 |             asa917-k8.bin |
+| 116 |  9.1.7.12 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 08-12-2016 |          asa917-12-k8.bin |
+| 117 |  9.1.7.13 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 04-01-2017 |          asa917-13-k8.bin |
+| 118 |  9.1.7.19 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 11-08-2017 |      asa917-19-smp-k8.bin |
+| 119 |  9.1.7.20 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 02-11-2017 |      asa917-20-smp-k8.bin |
+| 120 |  9.1.7.20 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 02-11-2017 |          asa917-20-k8.bin |
+| 121 |  9.1.7.21 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 19-12-2017 |          asa917-21-k8.bin |
+| 122 |  9.1.7.21 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 19-12-2017 |      asa917-21-smp-k8.bin |
+| 123 |  9.1.7.23 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 01-02-2018 |      asa917-23-smp-k8.bin |
+| 124 |  9.1.7.23 | 32 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 01-02-2018 |          asa917-23-k8.bin |
+| 125 |  9.1.7.25 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 06-03-2018 |      asa917-25-smp-k8.bin |
+| 126 |  9.1.7.25 | 32 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 06-03-2018 |          asa917-25-k8.bin |
+| 127 |   9.1.7.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 19-02-2016 |           asa917-4-k8.bin |
+| 128 |   9.1.7.6 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 05-04-2016 |           asa917-6-k8.bin |
+| 129 |   9.1.7.9 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 18-08-2016 |           asa917-9-k8.bin |
+| 130 |     9.2.1 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 24-04-2014 |             asa921-k8.bin |
+| 131 |     9.2.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 24-04-2014 |         asa921-smp-k8.bin |
+| 132 |     9.2.2 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 26-06-2014 |             asa922-k8.bin |
+| 133 |     9.2.2 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 26-06-2014 |         asa922-smp-k8.bin |
+| 134 |   9.2.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 29-07-2014 |           asa922-4-k8.bin |
+| 135 |   9.2.2.4 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 29-07-2014 |       asa922-4-smp-k8.bin |
+| 136 |     9.2.3 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 15-12-2014 |             asa923-k8.bin |
+| 137 |     9.2.3 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 15-12-2014 |         asa923-smp-k8.bin |
+| 138 |     9.2.4 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 14-07-2015 |             asa924-k8.bin |
+| 139 |     9.2.4 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 14-07-2015 |         asa924-smp-k8.bin |
+| 140 |  9.2.4.10 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 19-04-2016 |          asa924-10-k8.bin |
+| 141 |  9.2.4.13 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 22-06-2016 |      asa924-13-smp-k8.bin |
+| 142 |  9.2.4.14 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 18-08-2016 |          asa924-14-k8.bin |
+| 143 |  9.2.4.18 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 27-10-2016 |          asa924-18-k8.bin |
+| 144 |  9.2.4.18 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 27-10-2016 |      asa924-18-smp-k8.bin |
+| 145 |  9.2.4.24 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 13-09-2017 |          asa924-24-k8.bin |
+| 146 |  9.2.4.24 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 13-09-2017 |      asa924-24-smp-k8.bin |
+| 147 |  9.2.4.25 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 14-12-2017 |      asa924-25-smp-k8.bin |
+| 148 |  9.2.4.25 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 14-12-2017 |          asa924-25-k8.bin |
+| 149 |  9.2.4.27 | 32 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 02-02-2018 |          asa924-27-k8.bin |
+| 150 |  9.2.4.27 | 64 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 02-02-2018 |      asa924-27-smp-k8.bin |
+| 151 |  9.2.4.28 | 32 |  N |  N | N | N |   N | N |  N  |        ? |   2.9 | dlmalloc 2.8.3 | 06-03-2018 |          asa924-28-k8.bin |
+| 152 |   9.2.4.5 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 21-12-2015 |           asa924-5-k8.bin |
+| 153 |   9.2.4.5 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 21-12-2015 |       asa924-5-smp-k8.bin |
+| 154 |   9.2.4.8 | 32 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 24-02-2016 |           asa924-8-k8.bin |
+| 155 |   9.2.4.8 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 24-02-2016 |       asa924-8-smp-k8.bin |
+| 156 |     9.3.1 | 64 |  N |  N | N | N |   N | N |  N  | 2.6.29.6 |   2.9 | dlmalloc 2.8.3 | 23-07-2014 |         asa931-smp-k8.bin |
+| 157 |     9.3.2 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x | 16-12-2014 |         asa932-smp-k8.bin |
+| 158 | 9.3.2.200 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x | 18-12-2014 |     asa932-200-smp-k8.bin |
+| 159 | 9.3.2.200 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x | 18-12-2014 |         asav932-200.qcow2 |
+| 160 |     9.3.3 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x |          ? |         asa933-smp-k8.bin |
+| 161 |  9.3.3.10 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x | 18-08-2016 |          asav933-10.qcow2 |
+| 162 |  9.3.3.11 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x | 09-09-2016 |      asa933-11-smp-k8.bin |
+| 163 |  9.3.3.11 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x | 09-09-2016 |          asav933-11.qcow2 |
+| 164 |   9.3.3.7 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x | 21-12-2015 |       asa933-7-smp-k8.bin |
+| 165 |   9.3.3.9 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x | 26-02-2016 |       asa933-9-smp-k8.bin |
+| 166 |   9.3.3.9 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.19 |  2.18 |   ptmalloc 2.x | 26-02-2016 |           asav933-9.qcow2 |
+| 167 |     9.4.1 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 21-03-2015 |         asa941-smp-k8.bin |
+| 168 |     9.4.1 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 21-03-2015 |             asav941.qcow2 |
+| 169 |  9.4.1.13 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 03-08-2016 |      asa941-13-smp-k8.bin |
+| 170 |  9.4.1.13 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 03-08-2016 |          asav941-13.qcow2 |
+| 171 | 9.4.1.200 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 11-05-2015 |         asav941-200.qcow2 |
+| 172 |   9.4.1.6 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 16-10-2015 |           asav941-6.qcow2 |
+| 173 |     9.4.2 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 23-09-2015 |         asa942-smp-k8.bin |
+| 174 |     9.4.2 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 23-09-2015 |             asav942.qcow2 |
+| 175 |  9.4.2.11 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 22-02-2016 |      asa942-11-smp-k8.bin |
+| 176 |   9.4.2.6 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 27-01-2016 |       asa942-6-smp-k8.bin |
+| 177 |   9.4.2.6 | 64 |  N |  N | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 27-01-2016 |           asav942-6.qcow2 |
+| 178 |     9.4.3 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 24-04-2016 |         asa943-smp-k8.bin |
+| 179 |  9.4.3.12 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 20-10-2016 |      asa943-12-smp-k8.bin |
+| 180 |     9.4.4 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 06-01-2017 |         asa944-smp-k8.bin |
+| 181 |  9.4.4.10 | 64 |  N |  Y | N | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 16-08-2017 |      asa944-10-smp-k8.bin |
+| 182 |  9.4.4.12 | 64 |  N |  Y | N | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 14-09-2017 |      asa944-12-smp-k8.bin |
+| 183 |  9.4.4.13 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 12-10-2017 |      asa944-13-smp-k8.bin |
+| 184 |  9.4.4.14 | 64 |  N |  Y | N | N |   N | N |  N  |  3.10.55 |  2.18 |   ptmalloc 2.x | 28-11-2017 |      asa944-14-smp-k8.bin |
+| 185 |  9.4.4.16 | 64 |  N |  Y | N | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 02-02-2018 |      asa944-16-smp-k8.bin |
+| 186 |  9.4.4.17 | 64 |  N |  Y | N | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 06-02-2018 |      asa944-17-smp-k8.bin |
+| 187 |  9.4.4.18 | 64 |  N |  Y | N | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 29-03-2018 |      asa944-18-smp-k8.bin |
+| 188 |   9.4.4.6 | 64 |  N |  Y | N | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 27-04-2017 |       asa944-6-smp-k8.bin |
+| 189 |   9.4.4.8 | 64 |  N |  Y | N | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 16-07-2017 |       asa944-8-smp-k8.bin |
+| 190 |     9.5.1 | 64 |  Y |  N | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 12-08-2015 |         asa951-smp-k8.bin |
+| 191 |     9.5.2 | 64 |  Y |  N | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 28-11-2015 |         asa952-smp-k8.bin |
+| 192 |   9.5.2.2 | 64 |  Y |  N | Y | N |   N | Y |  N  |        ? |  2.18 |   ptmalloc 2.x | 22-12-2015 |       asa952-2-smp-k8.bin |
+| 193 | 9.5.2.204 | 64 |  Y |  N | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 15-02-2016 |         asav952-204.qcow2 |
+| 194 |   9.5.2.6 | 64 |  Y |  Y | Y | N |   N | Y |  N  |        ? |  2.18 |   ptmalloc 2.x | 04-03-2016 |       asa952-6-smp-k8.bin |
+| 195 |     9.5.3 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 30-08-2016 |         asa953-smp-k8.bin |
+| 196 |     9.6.1 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 18-03-2016 |         asa961-smp-k8.bin |
+| 197 |     9.6.1 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 18-03-2016 |             asav961.qcow2 |
+| 198 |  9.6.1.10 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 09-08-2016 |      asa961-10-smp-k8.bin |
+| 199 |     9.6.2 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 23-08-2016 |         asa962-smp-k8.bin |
+| 200 |     9.6.2 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 23-08-2016 |             asav962.qcow2 |
+| 201 |   9.6.2.2 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 07-10-2016 |           asav962-2.qcow2 |
+| 202 |   9.6.2.3 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 26-10-2016 |       asa962-3-smp-k8.bin |
+| 203 |   9.6.2.7 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 05-12-2016 |           asav962-7.qcow2 |
+| 204 |  9.6.3.17 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 16-10-2017 |      asa963-17-smp-k8.bin |
+| 205 |  9.6.3.20 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 17-11-2017 |      asa963-20-smp-k8.bin |
+| 206 |     9.6.4 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 13-12-2017 |         asa964-smp-k8.bin |
+| 207 |   9.6.4.3 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 02-02-2018 |       asa964-3-smp-k8.bin |
+| 208 |   9.6.4.8 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 11-04-2018 |       asa964-8-smp-k8.bin |
+| 209 |     9.7.1 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 16-01-2017 |         asa971-smp-k8.bin |
+| 210 |     9.7.1 | 64 |  Y |  Y | Y | N |   N | Y |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 16-01-2017 |             asav971.qcow2 |
+| 211 |  9.7.1.15 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 29-08-2017 |      asa971-15-smp-k8.bin |
+| 212 |  9.7.1.16 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 19-10-2017 |      asa971-16-smp-k8.bin |
+| 213 |  9.7.1.21 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 02-02-2018 |      asa971-21-smp-k8.bin |
+| 214 |   9.7.1.4 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 31-03-2017 |       asa971-4-smp-k8.bin |
+| 215 |     9.8.1 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 10-05-2017 |         asa981-smp-k8.bin |
+| 216 |   9.8.1.5 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 23-06-2017 |           asav981-5.qcow2 |
+| 217 |   9.8.1.7 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 28-07-2017 |       asa981-7-smp-k8.bin |
+| 218 |     9.8.2 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 27-08-2017 |         asa982-smp-k8.bin |
+| 219 |  9.8.2.14 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 06-11-2017 |      asa982-14-smp-k8.bin |
+| 220 |  9.8.2.15 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 10-11-2017 |      asa982-15-smp-k8.bin |
+| 221 |  9.8.2.17 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 04-01-2018 |      asa982-17-smp-k8.bin |
+| 222 |  9.8.2.20 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 02-02-2018 |      asa982-20-smp-k8.bin |
+| 223 |  9.8.2.24 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 01-03-2018 |      asa982-24-smp-k8.bin |
+| 224 |  9.8.2.26 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 14-03-2018 |      asa982-26-smp-k8.bin |
+| 225 |  9.8.2.28 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 05-04-2018 |      asa982-28-smp-k8.bin |
+| 226 |  9.8.2.33 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 04-05-2018 |      asa982-33-smp-k8.bin |
+| 227 |   9.8.2.8 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 05-10-2017 |       asa982-8-smp-k8.bin |
+| 228 |     9.9.1 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 30-11-2017 |         asa991-smp-k8.bin |
+| 229 |     9.9.1 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 30-11-2017 |             asav991.qcow2 |
+| 230 |   9.9.1.2 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 02-02-2018 |       asa991-2-smp-k8.bin |
+| 231 |   9.9.1.3 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 06-02-2018 |       asa991-3-smp-k8.bin |
+| 232 |     9.9.2 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 25-03-2018 |             asav992.qcow2 |
+| 233 |     9.9.2 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 25-03-2018 |         asa992-smp-k8.bin |
+| 234 |   9.9.2.1 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 05-04-2018 |           asav992-1.qcow2 |
+| 235 |   9.9.2.1 | 64 |  Y |  Y | Y | N |   N | N |  N  |        ? |  2.18 |   ptmalloc 2.x | 05-04-2018 |       asa992-1-smp-k8.bin |
+| 236 |  9.9.2.14 | 64 |  Y |  Y | Y | N |   N | N |  N  |  3.10.62 |  2.18 |   ptmalloc 2.x | 12-07-2018 |          asav992-14.qcow2 |
+| ID  | Version   |Arch|ASLR| NX |PIE|Can|RELRO|Sym|Strip|    Linux | Glibc | Heap allocator | Build date | Firmware                  |
 
 # End-of-life ASA versions
 

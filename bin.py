@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 #
 # This file is part of asafw.
 # Copyright (c) 2017, Aaron Adams <aaron.adams(at)nccgroup(dot)trust>
