@@ -715,20 +715,52 @@ setup_serialshell()
     if [[ "$SERIALSHELL" == "YES" ]]
     then
 
-        sed -i '/# regular startup/i # serial shell specifics' asa/scripts/rcS
+        FWFILE_WITH_ASA=${FWFILE}
+        if [ ! -z ${FWFILE_WITH_ASA_TO_INJECT} ]
+        then
+            FWFILE_WITH_ASA=${FWFILE_WITH_ASA_TO_INJECT}
+            log "serial shell: overriding firmware with ${FWFILE_WITH_ASA} to patch rcS correctly"
+        fi
 
-        # we redirect stdin/out/err to the 2nd serial
-        # .bashrc does not seem to be loaded automatically so we force it to load with --rcfile
-        log "Exposing a Linux shell on 2nd serial (GNS3 only?)"
-        sed -i '/# regular startup/i \/bin\/bash --rcfile \/root\/.bashrc < \/dev\/ttyS1 > \/dev\/ttyS1 2> \/dev\/ttyS1 &' asa/scripts/rcS
+        if [[ "$FWFILE_WITH_ASA" == *"asav"* ]]
+        then
+            sed -i '/# regular startup/i # serial shell specifics' asa/scripts/rcS
 
-        # Not working properly yet so needs to be executed manually
-        #log "Starting lina at boot"
-        #sed -i 's/    echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/    echo "\/asa\/scripts\/lina_start.sh"/' asa/scripts/rcS
-        log "Not starting lina at boot"
-        sed -i 's/echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/echo ""/' asa/scripts/rcS
+            # we redirect stdin/out/err to the 2nd serial
+            # .bashrc does not seem to be loaded automatically so we force it to load with --rcfile
+            log "Exposing a Linux shell on 2nd serial (GNS3 only?)"
+            sed -i '/# regular startup/i \/bin\/bash --rcfile \/root\/.bashrc < \/dev\/ttyS1 > \/dev\/ttyS1 2> \/dev\/ttyS1 &' asa/scripts/rcS
 
-        declare -a scripts_list=("lina_start.sh" "lina_debug.sh" "lin_a_kill.sh")
+            # Not working properly yet so needs to be executed manually
+            #log "Starting lina at boot"
+            #sed -i 's/    echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/    echo "\/asa\/scripts\/lina_start.sh"/' asa/scripts/rcS
+            log "Not starting lina at boot"
+            sed -i 's/echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/echo ""/' asa/scripts/rcS
+
+            # Avoids reaching the end of rcS script which triggers a reboot
+            #sed -i '/# Explicitly call reboot here for consistency across target rcS files/a echo "while true; do echo in while true loop; sleep 1; done" >> \/tmp\/run_cmd' asa/scripts/rcS
+            sed -i '/# Explicitly call reboot here for consistency across target rcS files/a echo "read -p \\"[asafw] Press enter to reboot\\"" >> \/tmp\/run_cmd' asa/scripts/rcS
+        else
+            log "Not starting lina at boot"
+            sed -i 's/echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/echo "echo \\"[asafw run_cmd] Not starting lina at boot\\""/' asa/scripts/rcS
+
+            log "Skipping setting baudrate on /dev/ttyUSB0 in serial_init"
+            sed -i 's/   if \[ -e \/dev\/ttyUSB0 \]; then stty -F \/dev\/ttyUSB0 115200; fi/   echo "[asafw serial_init] Skipping setting baudrate on \/dev\/ttyUSB0"/' asa/scripts/serial_init
+
+            # XXX - does not work yet - spawning the shell after resets that :( so may need to be done manually anyway
+            #log "Adding sourcing .bashrc before spawning shell"
+            #sed -i '/echo "\/sbin\/reboot -d 3"/i echo "[asafw rcS] Sourcing .bashrc"' asa/scripts/rcS
+            #sed -i '/echo "\/sbin\/reboot -d 3"/i source /root/.bashrc' asa/scripts/rcS
+
+            log "Spawning shell at the end of rcS"
+            sed -i '/echo "\/sbin\/reboot -d 3"/i echo "[asafw rcS] End of rcS reached, spawning a shell instead"' asa/scripts/rcS
+            sed -i '/echo "\/sbin\/reboot -d 3"/i \/bin\/sh < \/dev\/ttyS0 > \/dev\/ttyS0 2> \/dev\/ttyS0 &' asa/scripts/rcS
+
+            log "Not rebooting in /tmp/run_cmd"
+            sed -i 's/echo "\/sbin\/reboot -d 3"/echo "echo \\"[asafw run_cmd] Do nothing instead of rebooting\\""/' asa/scripts/rcS
+        fi
+
+        declare -a scripts_list=("lstart.sh" "ldebug.sh" "lkill.sh" "lclean.sh")
         for file in "${scripts_list[@]}"
         do
             log "Copying ${file} script"
@@ -764,11 +796,6 @@ setup_serialshell()
             log "ERROR: '${CMD}' failed"
             exit 1
         fi
-
-        # Avoids reaching the end of rcS script which triggers a reboot
-        #sed -i '/# Explicitly call reboot here for consistency across target rcS files/a echo "while true; do echo in while true loop; sleep 1; done" >> \/tmp\/run_cmd' asa/scripts/rcS
-        sed -i '/# Explicitly call reboot here for consistency across target rcS files/a echo "read -p \\"[asafw] Press enter to reboot\\"" >> \/tmp\/run_cmd' asa/scripts/rcS
-
     fi
 }
 
