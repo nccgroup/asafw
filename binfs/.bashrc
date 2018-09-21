@@ -6,5 +6,6 @@ alias lstart="/asa/scripts/lstart.sh"
 alias ldebug="/asa/scripts/ldebug.sh"
 alias lkill="/asa/scripts/lkill.sh"
 alias lclean="/asa/scripts/lclean.sh"
+alias ltrap="/asa/scripts/ltrap.sh"
 
 echo "[bashrc] Done."

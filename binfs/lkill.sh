@@ -1,8 +1,6 @@
 #!/bin/sh
 #
 # Kill stale gdbserver or lina processes
-#
-# Note: the typo "lin_a" instead of "lina" is so we don't kill our script before it finishes
 
 pkill -h &>2 /dev/null
 if [ $? = 127 ]; then
@@ -12,11 +10,11 @@ if [ $? = 127 ]; then
 	#  1248 root     gdbserver /dev/ttyUSB0 /asa/bin/lina -t -g -l
 	#  1251 root     [lina]
 	#  1304 root     grep lina
-	# # ps|grep lina | cut -d" " -f2
+	# # ps|grep lina|cut -d" " -f2
 	# 1248
 	# 1251
 	# 1306
-	PID_LIST=$(ps|grep lina | cut -d" " -f2)
+	PID_LIST=$(ps|grep lina|cut -d" " -f2)
 	for PID in $PID_LIST
 	do
 		echo "[lkill] Killing PID: $PID"
