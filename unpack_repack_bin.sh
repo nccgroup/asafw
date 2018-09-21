@@ -760,7 +760,7 @@ setup_serialshell()
             sed -i 's/echo "\/sbin\/reboot -d 3"/echo "echo \\"[asafw run_cmd] Do nothing instead of rebooting\\""/' asa/scripts/rcS
         fi
 
-        declare -a scripts_list=("lstart.sh" "ldebug.sh" "lkill.sh" "lclean.sh", "ltrap.sh")
+        declare -a scripts_list=("lstart.sh" "ldebug.sh" "lkill.sh" "lclean.sh" "ltrap.sh")
         for file in "${scripts_list[@]}"
         do
             log "Copying ${file} script"
