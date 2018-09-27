@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Attach gdbserver to lina userland process without reboot the whole Linux OS
+# Start lina userland process under gdbserver without reboot the whole Linux OS
 
 /asa/scripts/lkill.sh
 /asa/scripts/lclean.sh
@@ -16,7 +16,7 @@ else
 	# GNS3
 	DEBUG_PORT=/dev/ttyS0
 fi
-echo "[ldebug] Starting gdbserver on lina in the background, listening on $DEBUG_PORT..."
+echo "[ldebug] Starting lina under gdbserver in the background, listening on $DEBUG_PORT..."
 gdbserver $DEBUG_PORT /asa/bin/lina -t -g -l &
 
 echo "[ldebug] Done."

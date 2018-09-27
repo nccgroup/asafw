@@ -29,7 +29,7 @@ else
 	pkill -9 lina
 fi
 
-echo "[lkill] Sleeping 5 seconds..."
-sleep 5
+echo "[lkill] Sleeping 2 seconds..."
+sleep 2
 
 echo "[lkill] Done."

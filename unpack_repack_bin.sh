@@ -727,9 +727,9 @@ setup_serialshell()
             sed -i '/# regular startup/i # serial shell specifics' asa/scripts/rcS
 
             # we redirect stdin/out/err to the 2nd serial
-            # .bashrc does not seem to be loaded automatically so we force it to load with --rcfile
+            # bashrc does not seem to be loaded automatically so we force it to load with --rcfile
             log "Exposing a Linux shell on 2nd serial (GNS3 only?)"
-            sed -i '/# regular startup/i \/bin\/bash --rcfile \/root\/.bashrc < \/dev\/ttyS1 > \/dev\/ttyS1 2> \/dev\/ttyS1 &' asa/scripts/rcS
+            sed -i '/# regular startup/i \/bin\/bash --rcfile \/root\/bashrc < \/dev\/ttyS1 > \/dev\/ttyS1 2> \/dev\/ttyS1 &' asa/scripts/rcS
 
             # Not working properly yet so needs to be executed manually
             #log "Starting lina at boot"
@@ -748,9 +748,9 @@ setup_serialshell()
             sed -i 's/   if \[ -e \/dev\/ttyUSB0 \]; then stty -F \/dev\/ttyUSB0 115200; fi/   echo "[asafw serial_init] Skipping setting baudrate on \/dev\/ttyUSB0"/' asa/scripts/serial_init
 
             # XXX - does not work yet - spawning the shell after resets that :( so may need to be done manually anyway
-            #log "Adding sourcing .bashrc before spawning shell"
-            #sed -i '/echo "\/sbin\/reboot -d 3"/i echo "[asafw rcS] Sourcing .bashrc"' asa/scripts/rcS
-            #sed -i '/echo "\/sbin\/reboot -d 3"/i source /root/.bashrc' asa/scripts/rcS
+            #log "Adding sourcing bashrc before spawning shell"
+            #sed -i '/echo "\/sbin\/reboot -d 3"/i echo "[asafw rcS] Sourcing bashrc"' asa/scripts/rcS
+            #sed -i '/echo "\/sbin\/reboot -d 3"/i source /root/bashrc' asa/scripts/rcS
 
             log "Spawning shell at the end of rcS"
             sed -i '/echo "\/sbin\/reboot -d 3"/i echo "[asafw rcS] End of rcS reached, spawning a shell instead"' asa/scripts/rcS
@@ -760,7 +760,7 @@ setup_serialshell()
             sed -i 's/echo "\/sbin\/reboot -d 3"/echo "echo \\"[asafw run_cmd] Do nothing instead of rebooting\\""/' asa/scripts/rcS
         fi
 
-        declare -a scripts_list=("lstart.sh" "ldebug.sh" "lkill.sh" "lclean.sh" "ltrap.sh")
+        declare -a scripts_list=("lstart.sh" "ldebug.sh" "lattach.sh" "lkill.sh" "lclean.sh" "ltrap.sh")
         for file in "${scripts_list[@]}"
         do
             log "Copying ${file} script"
@@ -780,7 +780,7 @@ setup_serialshell()
             fi
         done
 
-        file=".bashrc"
+        file="bashrc"
         log "Copying ${file} script"
         CMD="cp ${TOOLDIR}/binfs/${file} root/${file}"
         ${CMD}
