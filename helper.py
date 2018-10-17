@@ -134,10 +134,10 @@ def load_targets(targetdb):
                     break
             if attempts == max_attempts:
                 print('[helper] [!] failed to read %s' % targetdb)
-                sys.exit() 
+                sys.exit(1) 
     else:
         print('[helper] [!] %s file not found' % targetdb)
-        sys.exit() 
+        sys.exit(1) 
     return targets 
 
 def get_target_index(targets, bin_name):

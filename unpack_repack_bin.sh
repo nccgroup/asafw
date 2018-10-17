@@ -733,7 +733,7 @@ setup_serialshell()
 
             # Not working properly yet so needs to be executed manually
             #log "Starting lina at boot"
-            #sed -i 's/    echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/    echo "\/asa\/scripts\/lina_start.sh"/' asa/scripts/rcS
+            #sed -i 's/echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/    echo "\/asa\/scripts\/lina_start.sh"/' asa/scripts/rcS
             log "Not starting lina at boot"
             sed -i 's/echo "$CGEXEC \/asa\/bin\/lina_monitor.*"/echo ""/' asa/scripts/rcS
 
