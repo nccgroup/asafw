@@ -84,6 +84,7 @@ mount_qcow()
     mount /dev/nbd0p${2} ${1}
     if [ $? != 0 ]; then
         log "[!] Could not mount ${1}"
+        sync
         umount ${1}
         exit
     fi
@@ -101,6 +102,7 @@ inject_grub_config()
     mount_qcow ${1} 1
     cp ${2} ${1}/boot/grub.conf
     log "Overwrote ${1}/boot/grub/conf with ${2}"
+    sync
     umount ${1}
 }
 
@@ -115,6 +117,7 @@ inject_multibin()
     mount_qcow ${1} 2
     cp ${2} ${1}/
     log "Wrote ${2} into partition 2 of multi-bin qcow"
+    sync
     umount ${1}
 }
 
@@ -137,12 +140,14 @@ extract_bin()
     COUNTBIN=$(ls ${1}/asa*.bin|wc -l)
     if [[ "$COUNTBIN" != "1" ]]; then
         log "[!] ERROR: Found ${COUNTBIN} asa*.bin in partition 1"
+        sync
         umount ${1}
         exit
     fi
     BINPATH=$(ls ${1}/asa*.bin)
     if [ $? != 0 ]; then
         log "[!] ERROR: Couldn't not find ${1}/asa*.bin in partition 1"
+        sync
         umount ${1}
         exit
     fi
@@ -172,11 +177,13 @@ extract_bin()
         if [ $? != 0 ];
         then
             log "${SEDCMD} failed"
+            sync
             umount ${1}
             exit
         fi
     fi
 
+    sync
     umount ${1}
     log "Unmounted ${1}"
 }
@@ -258,6 +265,7 @@ add_serial()
     touch "${MNTDIR}/use_ttyS0"
     log "Wrote use_ttyS0 file"
 
+    sync
     umount ${MNTDIR}
     log "Unmounted ${MNTDIR}"
     fini_nbd
@@ -316,6 +324,7 @@ repackage_qcow2()
         DEST=${ORIG}
     else
         sleep 1
+        sync
         umount ${4}
 
         # get filename without extension and extension
@@ -355,6 +364,7 @@ repackage_qcow2()
         exit
     fi
     log "Injected ${3} with new .bin file ${DEST}"
+    sync
     umount ${4}
     fini_nbd
     log "Unmounted ${4}"
@@ -656,6 +666,7 @@ if [ ! -z "${QCOW_MOUNT}" ]; then
 fi
 
 if [ ! -z "${QCOW_UMOUNT}" ]; then
+    sync
     umount ${QCOW2MNT}
     fini_nbd
     exit
