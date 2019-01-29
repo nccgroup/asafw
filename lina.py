@@ -119,11 +119,7 @@ class LinuxReverseShell(object):
         self._shellcode         = None
         self._scratch_off       = scratch_off
 
-    def replaceSymbol(self, pattern, symbolname, mask=0xffffffffffffffff, 
-            use_slide=False):
-        slide = 0x0
-        if use_slide:
-            slide = self._target["lina_imagebase"]
+    def replaceSymbol(self, pattern, symbolname, mask=0xffffffffffffffff):
         if len(pattern) == 4:
             fmt = "<I"
         elif len(pattern) == 8:
