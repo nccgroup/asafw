@@ -441,7 +441,7 @@ enable_gdb()
             log "Using recent ASA gdb patching method"
             sed -i 's/#\(.*\)ttyUSB0\(.*\)/\1ttyS0\2/' asa/scripts/rcS
             # Don't output anything on the tty, as this breaks some gdb versions
-            sed -i 's/ttyS0::once:\/tmp\/run_cmd/::once:\/tmp\/run_cmd/' etc/inittab
+            sed -i 's/ttyS0::once:\/tmp\/run_cmd/tty0::once:\/tmp\/run_cmd/' etc/inittab
         fi
     fi
 }
