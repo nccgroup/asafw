@@ -193,6 +193,31 @@ def unroot(firmwarefile, out_bin_name=None):
     logmsg("unroot: Writing %s (%d bytes)..." % (out_bin_name, len(data)))
     open(out_bin_name, 'wb').write(data)
 
+# For some firmwares such as asav9101.qcow2, use kernel parameter 'norandmaps' to disable ASLR instead.
+def disable_aslr(firmwarefile, out_bin_name=None):
+
+    if out_bin_name == None:
+        fileinfo = os.path.splitext(firmwarefile)
+        out_bin_name = fileinfo[0] + '-noaslr' + fileinfo[1]
+    original_cmdline = b"quiet loglevel=0 auto"
+    replace_cmdline = b"norandmaps quiet"
+
+    bin_data = open(firmwarefile, 'rb').read()
+    idx = bin_data.rfind(original_cmdline)
+    if idx == -1:
+        logmsg("Warning: Could not find kernel command line, trying alternative method")
+        # e.g. for 8.0.3
+        original_cmdline = b"auto quiet loglevel=0"
+        idx = bin_data.rfind(original_cmdline)
+        if idx == -1:
+            logmsg("Error: Could not find kernel command line")
+            sys.exit(1)
+    while len(replace_cmdline) < len(original_cmdline):
+        replace_cmdline += b' '
+    bin_data = bin_data.replace(original_cmdline, replace_cmdline)
+    logmsg("disable_aslr: Writing %s (%d bytes)..." % (out_bin_name, len(bin_data)))
+    open(out_bin_name, 'wb').write(bin_data)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--firmware-file', dest='firmware_file', default=None)
@@ -201,6 +226,7 @@ if __name__ == '__main__':
     parser.add_argument('-r', '--repack', dest='repack', default=False, action="store_true")
     parser.add_argument('-t', '--root', dest='root', default=False, action="store_true")
     parser.add_argument('-T', '--unroot', dest='unroot', default=False, action="store_true")
+    parser.add_argument('-A', '--disable-aslr', dest='disable_aslr', default=False, action="store_true")
     parser.add_argument('-o', '--output-file', dest='outputfile', default=None)
     args = parser.parse_args()
 
@@ -211,7 +237,11 @@ if __name__ == '__main__':
         if not args.firmware_file or not args.gzip_file:
             parser.error("[bin] Error: Provide a firmware and a gzip file for repacking")
         repack(args.firmware_file, args.gzip_file, args.outputfile)
-        if args.root:
+        if args.disable_aslr:
+            disable_aslr(args.outputfile, args.outputfile)
+            if args.root:
+                logmsg("Warning: Ignore '--root' option for we have to disable ASLR using kernel parameter 'norandmaps'")
+        elif args.root:
             root(args.outputfile, args.outputfile)
         sys.exit()
 
@@ -219,6 +249,15 @@ if __name__ == '__main__':
         if not args.firmware_file:
             parser.error("[bin] Error: Provide a firmware file for unpacking")
         unpack(args.firmware_file)
+        sys.exit()
+
+    # For option args.disable_aslr has conflict with option args.root, just give preference to the former.
+    if args.disable_aslr:
+        if not args.firmware_file:
+            parser.error("[bin] Error: Provide a firmware file for disabling ASLR")
+        disable_aslr(args.firmware_file, args.outputfile)
+        if args.root:
+            logmsg("Warning: Ignore '--root' option for we have to disable ASLR using kernel parameter 'norandmaps'")
         sys.exit()
 
     if args.root:
