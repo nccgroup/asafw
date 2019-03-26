@@ -404,7 +404,16 @@ disable_aslr()
         #echo "kernel.randomize_va_space = 0" >> etc/sysctl.conf.procps
         # because it looks like rcS.common overrides our value later in the boot process
         # so we just make the modification in rcS.common :)
-        sed -i 's/echo 2 > \/proc\/sys\/kernel\/randomize_va_space/echo 0 > \/proc\/sys\/kernel\/randomize_va_space/' asa/scripts/rcS.common
+
+        # deal with case when no randomize_va_space in asa/scripts/rcS.common, such as asav9101.qcow2
+        VASPACE=$(grep randomize_va_space "asa/scripts/rcS.common")
+        if [ -n "$VASPACE" ]
+        then
+            sed -i 's/echo 2 > \/proc\/sys\/kernel\/randomize_va_space/echo 0 > \/proc\/sys\/kernel\/randomize_va_space/' asa/scripts/rcS.common
+        else
+            # use kernel parameter 'norandmaps' instead
+            DISABLE_ASLR_ARGS=--disable-aslr
+        fi
     fi
 }
 
@@ -942,11 +951,11 @@ repack_bin()
     else
         ROOTARGS=
     fi
-    dbglog ${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS
-    ${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS
+    dbglog ${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS $DISABLE_ASLR_ARGS
+    ${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS $DISABLE_ASLR_ARGS
     if [ $? != 0 ];
     then
-        log "${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS failed"
+        log "${FWTOOL} -r -f "$FWFILE" -g "$GZIP_MODIFIED" -o "$OUTFILE" $ROOTARGS $DISABLE_ASLR_ARGS failed"
         exit 1
     fi
 
