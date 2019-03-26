@@ -407,6 +407,7 @@ disable_aslr()
 
         # deal with case when no randomize_va_space in asa/scripts/rcS.common, such as asav9101.qcow2
         VASPACE=$(grep randomize_va_space "asa/scripts/rcS.common")
+        DISABLE_ASLR_ARGS=
         if [ -n "$VASPACE" ]
         then
             sed -i 's/echo 2 > \/proc\/sys\/kernel\/randomize_va_space/echo 0 > \/proc\/sys\/kernel\/randomize_va_space/' asa/scripts/rcS.common
