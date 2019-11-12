@@ -971,6 +971,7 @@ repack_bin()
 
 if [ -z "${ASATOOLS}" ]; then
     log "This tool relies on env.sh which has not been sourced"
+    log "NOTE: Use sudo -E if you already sourced env.sh"
     exit 1
 fi
 

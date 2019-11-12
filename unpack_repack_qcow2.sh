@@ -470,6 +470,7 @@ extract_repack_one()
 
 if [ -z "${ASATOOLS}" ]; then
     log "[!] This tool relies on env.sh which has not been sourced"
+    log "NOTE: Use sudo -E if you already sourced env.sh"
     exit
 fi
 
@@ -613,6 +614,7 @@ done
 # do this hear so you can at least see -h without sudo
 if [ "$(whoami)" != "root" ]; then
     log "You need to be root to mount/unmount the qcow2"
+    log "NOTE: Use sudo -E if you sourced env.sh"
     exit
 fi
 
