@@ -202,7 +202,9 @@ init_nbd()
 {
     dbglog "init_nbd(${1})"
 
-    qemu-nbd --disconnect /dev/nbd0 > /dev/null
+    cmd="qemu-nbd --disconnect /dev/nbd0 > /dev/null"
+    dbglog "Executing: ${cmd}"
+    eval ${cmd}
     if [ -z "${1}}" ]; then
         log "[!] init_nbd() expects one argument"
         exit
@@ -690,7 +692,7 @@ else
     log "Using input qcow2 file: ${QCOW2FILE}"
     log "Using template qcow2 file: ${TEMPLATEQCOW2FILE}"
     log "Using output qcow2 file: ${OUTQCOW2FILE}"
-    log "Command line: ${BIN_CMDLINE}"
+    log "Using bin file command line: ${BIN_CMDLINE}"
 
     # Work is done in a "bin" directory because we use the same name for both
     # the .bin and the .qcow2 file. This is for several reasons:
