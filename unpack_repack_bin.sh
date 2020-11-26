@@ -950,7 +950,7 @@ repack_bin()
     fi
 
     log "repack_bin: $FWFILE"
-    find . | ${CPIO} -o -H newc 2>/dev/null | gzip > "$GZIP_MODIFIED"
+    find . | ${CPIO} -o -H newc 2>/dev/null | gzip -9 > "$GZIP_MODIFIED"
 
     # Leave working directory
     dbglog "Returning to ${OLDDIR}"
