@@ -343,6 +343,11 @@ unpack_bin()
         exit 1
     fi
     ${GUNZIP} -c "$GZIP_ORIGINAL" > "$CPIO_ORIGINAL"
+    if [ $? != 0 ];
+    then
+        log "ERROR: ${GUNZIP} -c $GZIP_ORIGINAL > $CPIO_ORIGINAL failed"
+        exit 1
+    fi
     rm -Rf work
     mkdir work
     cd work
@@ -441,12 +446,17 @@ enable_gdb()
         log "ENABLE GDB"
         if [[ "$FWFILE" == *"asa803"* ]]
         then
-            log "Using old ASA gdb patching method and patching serial port in lina_monitor"
+            log "Using asa803 ASA gdb patching method and patching serial port in lina_monitor"
             sed -i 's/\(\/asa\/bin\/lina_monitor\)/\1 -g -s \/dev\/ttyS0 -d/' etc/init.d/rcS
             # XXX - This assumption about the ${FIRMWAREDIR} contents is
             # error prone. If we require it, we should document it. We could
             # consider include thihs _asa803/lina_monitor_patched file in asafw
             cp ${FIRMWAREDIR}/_asa803/lina_monitor_patched $(pwd)/asa/bin/lina_monitor
+        elif [[ "$FWFILE" == *"asa804"* ]]
+        then
+            # XXX - untested - do we need to patch lina_monitor too?
+            log "Using asa804 ASA gdb patching method"
+            sed -i 's/\(\/asa\/bin\/lina_monitor\)/\1 -g -s \/dev\/ttyS0 -d/' asa/scripts/rcS
         else
             log "Using recent ASA gdb patching method"
             sed -i 's/#\(.*\)ttyUSB0\(.*\)/\1ttyS0\2/' asa/scripts/rcS

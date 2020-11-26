@@ -40,14 +40,21 @@ def repack(firmwarefile, gzipfile, out_bin_name=None):
 
     # extract previous gz size from firmware
     # string is not far from the end so quicker to look for it from the end
-    idx = bin_data.rfind(b"quiet loglevel=0 auto")
+    cmdlines = [
+        b"quiet loglevel=0 auto",
+        b"auto quiet loglevel=0", # e.g. for 8.0.3
+        b"quiet loglevel=0 ide1=noprobe", # e.g. for 8.0.4
+    ]
+    i = 0
+    while i < len(cmdlines):
+        idx = bin_data.rfind(cmdlines[i])
+        if idx != -1:
+            break
+        i += 1
     if idx == -1:
-        logmsg("Warning: Could not find kernel command line, trying alternative method")
-        # e.g. for 8.0.3
-        idx = bin_data.rfind(b"auto quiet loglevel=0")
-        if idx == -1:
-            logmsg("Error: Could not find kernel command line")
-            sys.exit(1)
+        logmsg("Error: Could not find any kernel command line")
+        sys.exit(1)
+
     # XXX - there must be a proper way for finding the gz size
     idx_gz_size = idx-4
     old_gz_size = struct.unpack("<I", bin_data[idx_gz_size:idx_gz_size+4])[0]
@@ -74,7 +81,19 @@ def repack(firmwarefile, gzipfile, out_bin_name=None):
                 break
             i = idx + 3
 
-    idx_gz = idx & 0xfffffff0
+    indexes_gz = [
+        idx & 0xfffffff0,
+        (idx & 0xfffffff0) - 1, # XXX - hack, e.g. for 8.0.4
+    ]
+    i = 0
+    while i < len(indexes_gz):
+        idx_gz = indexes_gz[i]
+        if bin_data[idx_gz:idx_gz+2] == b"\x1f\x8b":
+            break
+        i += 1
+    if bin_data[idx_gz:idx_gz+2] != b"\x1f\x8b":
+        logmsg("Error: Could not find gzip offset using 0x%x" % idx)
+        sys.exit(1)
     #logmsg("idx_gz=0x%x" % idx_gz)
 
     out_bin_data = bin_data[:idx_gz] + gz_data + bin_data[idx_gz+len(gz_data):idx_gz_size] + \
@@ -94,14 +113,21 @@ def unpack(firmwarefile):
 
     # extract previous gz size from firmware
     # string is not far from the end so quicker to look for it from the end
-    idx = bin_data.rfind(b"quiet loglevel=0 auto")
+    cmdlines = [
+        b"quiet loglevel=0 auto",
+        b"auto quiet loglevel=0", # e.g. for 8.0.3
+        b"quiet loglevel=0 ide1=noprobe", # e.g. for 8.0.4
+    ]
+    i = 0
+    while i < len(cmdlines):
+        idx = bin_data.rfind(cmdlines[i])
+        if idx != -1:
+            break
+        i += 1
     if idx == -1:
-        logmsg("Warning: Could not find kernel command line, trying alternative method")
-        # e.g. for 8.0.3
-        idx = bin_data.rfind(b"auto quiet loglevel=0")
-        if idx == -1:
-            logmsg("Error: Could not find kernel command line")
-            sys.exit(1)
+        logmsg("Error: Could not find any kernel command line")
+        sys.exit(1)
+
     # XXX - there must be a proper way for finding the gz size
     idx_gz_size = idx-4
     old_gz_size = struct.unpack("<I", bin_data[idx_gz_size:idx_gz_size+4])[0]
@@ -129,8 +155,21 @@ def unpack(firmwarefile):
                 break
             i = idx + 3
     
-    idx_gz = idx & 0xfffffff0
+    indexes_gz = [
+        idx & 0xfffffff0,
+        (idx & 0xfffffff0) - 1, # XXX - hack, e.g. for 8.0.4
+    ]
+    i = 0
+    while i < len(indexes_gz):
+        idx_gz = indexes_gz[i]
+        if bin_data[idx_gz:idx_gz+2] == b"\x1f\x8b":
+            break
+        i += 1
+    if bin_data[idx_gz:idx_gz+2] != b"\x1f\x8b":
+        logmsg("Error: Could not find gzip offset using 0x%x" % idx)
+        sys.exit(1)
     #logmsg("idx_gz=0x%x" % idx_gz)
+
     logmsg("Writing %s (%d bytes)..." % (out_gz_name, old_gz_size))
     open(out_gz_name, 'wb').write(bin_data[idx_gz:idx_gz+old_gz_size])
 
