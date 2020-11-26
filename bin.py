@@ -29,14 +29,12 @@ def logmsg(s, end=None):
     else:
         print(s)
 
-# Reinject a filesystem into a asa*.bin
-def repack(firmwarefile, gzipfile, out_bin_name=None):
-    logmsg("Repacking...")
-    bin_data = open(firmwarefile, 'rb').read()
-    gz_data = open(gzipfile, 'rb').read()
-    if out_bin_name == None:
-        fileinfo = os.path.splitext(firmwarefile)
-        out_bin_name = fileinfo[0] + '-repacked' + fileinfo[1]
+def find_offsets(bin_data):
+    """Find specific offsets in the asa*.bin file that are useful for unpacking
+    and repacking.
+
+    :param bin_data: the raw binary data read from asa*.bin
+    """
 
     # extract previous gz size from firmware
     # string is not far from the end so quicker to look for it from the end
@@ -58,80 +56,6 @@ def repack(firmwarefile, gzipfile, out_bin_name=None):
     # XXX - there must be a proper way for finding the gz size
     idx_gz_size = idx-4
     old_gz_size = struct.unpack("<I", bin_data[idx_gz_size:idx_gz_size+4])[0]
-    if old_gz_size < len(gz_data):
-        logmsg("Error: Cannot patch the firmware because replacement .gz is bigger than the one in .bin (%s > %s)" % (len(gz_data), old_gz_size))
-        sys.exit(1)
-    logmsg("Old gzip size: 0x%x bytes" % (old_gz_size))
-    logmsg("New gzip size: 0x%x bytes" % (len(gz_data)))
-
-    # find gz data in firmware
-    # XXX - there must be a proper way for finding the gz beginning
-    idx = bin_data.find(b"rootfs.img")
-    if idx == -1:
-        logmsg("Warning: Could not find rootfs.img string, trying alternative method")
-        i = 0
-        while True:
-            idx = bin_data.find(b"\x1f\x8b\x08", i)
-            if idx == -1:
-                logmsg("Error: Could not find rootfs.img string or gzip start")
-                sys.exit(1)
-            logmsg("Found gzip magic at: 0x%x" % idx)
-            if idx & 0xfffffff0 == idx:
-                logmsg("Assuming good magic")
-                break
-            i = idx + 3
-
-    indexes_gz = [
-        idx & 0xfffffff0,
-        (idx & 0xfffffff0) - 1, # XXX - hack, e.g. for 8.0.4
-    ]
-    i = 0
-    while i < len(indexes_gz):
-        idx_gz = indexes_gz[i]
-        if bin_data[idx_gz:idx_gz+2] == b"\x1f\x8b":
-            break
-        i += 1
-    if bin_data[idx_gz:idx_gz+2] != b"\x1f\x8b":
-        logmsg("Error: Could not find gzip offset using 0x%x" % idx)
-        sys.exit(1)
-    #logmsg("idx_gz=0x%x" % idx_gz)
-
-    out_bin_data = bin_data[:idx_gz] + gz_data + bin_data[idx_gz+len(gz_data):idx_gz_size] + \
-                   struct.pack("<I", len(gz_data)) + bin_data[idx_gz_size+4:]
-    if len(out_bin_data) != len(bin_data):
-        logmsg("Error: Size are different. It should not happen")
-        sys.exit(1)
-    logmsg("repack: Writing %s (%d bytes)..." % (out_bin_name, len(out_bin_data)))
-    open(out_bin_name, 'wb').write(out_bin_data)
-
-# Extract a kernel and filesystem from an asa*.bin
-def unpack(firmwarefile):
-    logmsg("Unpacking...")
-    bin_data = open(firmwarefile, 'rb').read()
-    out_gz_name = os.path.splitext(firmwarefile)[0] + '-initrd-original.gz'
-    out_vmlinuz_name = os.path.splitext(firmwarefile)[0] + '-vmlinuz'
-
-    # extract previous gz size from firmware
-    # string is not far from the end so quicker to look for it from the end
-    cmdlines = [
-        b"quiet loglevel=0 auto",
-        b"auto quiet loglevel=0", # e.g. for 8.0.3
-        b"quiet loglevel=0 ide1=noprobe", # e.g. for 8.0.4
-    ]
-    i = 0
-    while i < len(cmdlines):
-        idx = bin_data.rfind(cmdlines[i])
-        if idx != -1:
-            break
-        i += 1
-    if idx == -1:
-        logmsg("Error: Could not find any kernel command line")
-        sys.exit(1)
-
-    # XXX - there must be a proper way for finding the gz size
-    idx_gz_size = idx-4
-    old_gz_size = struct.unpack("<I", bin_data[idx_gz_size:idx_gz_size+4])[0]
-    logmsg("Old gzip size: 0x%x bytes" % (old_gz_size))
 
     # XXX - there must be a proper way for finding the vmlinuz size
     idx_vmlinuz_size = idx_gz_size-4
@@ -154,7 +78,7 @@ def unpack(firmwarefile):
                 logmsg("Assuming good magic")
                 break
             i = idx + 3
-    
+
     indexes_gz = [
         idx & 0xfffffff0,
         (idx & 0xfffffff0) - 1, # XXX - hack, e.g. for 8.0.4
@@ -169,6 +93,42 @@ def unpack(firmwarefile):
         logmsg("Error: Could not find gzip offset using 0x%x" % idx)
         sys.exit(1)
     #logmsg("idx_gz=0x%x" % idx_gz)
+
+    return old_gz_size, idx_gz_size, idx_gz, old_vmlinuz_size
+
+# Reinject a filesystem into a asa*.bin
+def repack(firmwarefile, gzipfile, out_bin_name=None):
+    logmsg("Repacking...")
+    bin_data = open(firmwarefile, 'rb').read()
+    gz_data = open(gzipfile, 'rb').read()
+    if out_bin_name == None:
+        fileinfo = os.path.splitext(firmwarefile)
+        out_bin_name = fileinfo[0] + '-repacked' + fileinfo[1]
+
+    old_gz_size, idx_gz_size, idx_gz, _ = find_offsets(bin_data)
+    if old_gz_size < len(gz_data):
+        logmsg("Error: Cannot patch the firmware because replacement .gz is bigger than the one in .bin (%s > %s)" % (len(gz_data), old_gz_size))
+        sys.exit(1)
+    logmsg("Old gzip size: 0x%x bytes" % (old_gz_size))
+    logmsg("New gzip size: 0x%x bytes" % (len(gz_data)))
+
+    out_bin_data = bin_data[:idx_gz] + gz_data + bin_data[idx_gz+len(gz_data):idx_gz_size] + \
+                   struct.pack("<I", len(gz_data)) + bin_data[idx_gz_size+4:]
+    if len(out_bin_data) != len(bin_data):
+        logmsg("Error: Size are different. It should not happen")
+        sys.exit(1)
+    logmsg("repack: Writing %s (%d bytes)..." % (out_bin_name, len(out_bin_data)))
+    open(out_bin_name, 'wb').write(out_bin_data)
+
+# Extract a kernel and filesystem from an asa*.bin
+def unpack(firmwarefile):
+    logmsg("Unpacking...")
+    bin_data = open(firmwarefile, 'rb').read()
+    out_gz_name = os.path.splitext(firmwarefile)[0] + '-initrd-original.gz'
+    out_vmlinuz_name = os.path.splitext(firmwarefile)[0] + '-vmlinuz'
+
+    old_gz_size, idx_gz_size, idx_gz, old_vmlinuz_size = find_offsets(bin_data)
+    logmsg("Old gzip size: 0x%x bytes" % (old_gz_size))
 
     logmsg("Writing %s (%d bytes)..." % (out_gz_name, old_gz_size))
     open(out_gz_name, 'wb').write(bin_data[idx_gz:idx_gz+old_gz_size])
